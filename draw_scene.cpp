@@ -1,23 +1,26 @@
 #include "draw_scene.h"
+#include "tekstura.h"
 
 int mapWidth = 20;
 int mapHeight = 20;
 MapPlanner planner(mapWidth, mapHeight);
 int **map;
+double spacing = 2.0;
 
+int tex_id1;
 
 void setGreyMaterial() {
-	GLfloat  matSpecular[4] = { 1,1,1,1 };
+	GLfloat  matSpecular[4] = { 0,0,0,1 };
 	GLfloat  matAmbient[4] = { 0.2,0.2,0.2,1 };
-	GLfloat  matDiffuse[4] = { .5,.5,.5,1 };
+	GLfloat  matDiffuse[4] = { 1,1,1,1 };
 	GLfloat  matEmission[4] = { 0,0,0,1 };
-	GLfloat  matShininess = 50;
+	GLfloat  matShininess = 10;
 
-	//glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-	//glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
-	//glMateriali(GL_FRONT, GL_SHININESS, matShininess);
+	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
+	glMateriali(GL_FRONT, GL_SHININESS, matShininess);
 }
 
 void setPacmanMaterial() {
@@ -30,7 +33,7 @@ void setPacmanMaterial() {
 	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-	//glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
+	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
 	glMateriali(GL_FRONT, GL_SHININESS, matShininess);
 }
 
@@ -44,7 +47,7 @@ void setShinyMaterial() {
 	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-	//glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
+	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
 	glMateriali(GL_FRONT, GL_SHININESS, matShininess);
 }
 
@@ -55,6 +58,33 @@ void drawInit() {
 	map = planner.getArray();
 	mapWidth = planner.getWidth();
 	mapHeight = planner.getHeight();
+	tex_id1 = WczytajTeksture("szablon1.bmp");
+}
+
+void drawRoof(int x, int y, int z) {
+	setGreyMaterial();
+	glMatrixMode(GL_TEXTURE);
+	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
+	glRotatef(90, 1, 0, 0);
+
+	glBindTexture(GL_TEXTURE_2D, tex_id1);
+
+	glBegin(GL_QUADS);
+	glTexCoord3f(x, z, y);
+	glVertex3f(x, z, y);
+
+	glTexCoord3f(x, z, y + spacing);
+	glVertex3f(x, z, y + spacing);
+
+	glTexCoord3f(x+spacing, z, y + spacing);
+	glVertex3f(x+spacing, z, y+spacing);
+
+	glTexCoord3f(x+spacing, z, y);
+	glVertex3f(x+spacing, z, y);
+	glEnd();
+
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
 }
 
 // Function fired every frame
@@ -63,8 +93,6 @@ void drawScene() {
 	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
 	gluQuadricDrawStyle(obiekt, GLU_FILL);
 
-	glPushMatrix();
-	double spacing = 2.0;
 
 	// Shift for all map
 	glTranslatef(0, 0, -50);
@@ -72,10 +100,7 @@ void drawScene() {
 	// Labirynth
 	glPushMatrix();
 	glTranslatef(-mapWidth / 2 * spacing, 0, - mapHeight / 2 * spacing);
-
-	setGreyMaterial();
-	glutSolidCube(spacing);
-
+	
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
 			if (map[i][j] == 3) {
@@ -84,12 +109,12 @@ void drawScene() {
 			}
 			else if (map[i][j] == 1) {
 				setGreyMaterial();
-				glutSolidCube(spacing);
+				//glutSolidCube(spacing);
 			}
 
 			glTranslatef(0, -spacing, 0);
 				setGreyMaterial();
-				glutSolidCube(spacing);
+				//glutSolidCube(spacing);
 
 			glTranslatef(spacing, spacing, 0);
 		}
@@ -103,7 +128,18 @@ void drawScene() {
 		gluSphere(obiekt, .8, 50, 50);
 	glPopMatrix();
 
+	setGreyMaterial();
+	for (int j = 0; j<mapHeight; ++j) {
+		for (int i = 0; i<mapWidth; ++i) {
+			int x = (i - (mapWidth / 2))*spacing-spacing/2;
+			int y = (j - (mapHeight / 2))*spacing - spacing / 2;
+			int z = map[i][j] == 1?spacing/2:-spacing/2;
+			drawRoof(x, y, z);
+		}
+	}
 
-	glPopMatrix();
+	//glTranslatef(0, 5, 0);
+	//drawRoof();
+
 }
 

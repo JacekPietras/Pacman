@@ -47,7 +47,7 @@ void windowInit() {
 		float fogColor[4] = { 0, 0, 0, 1 };
 		glFogi(GL_FOG_MODE, GL_EXP2); // [GL_EXP, GL_EXP2, GL_LINEAR ]
 		glFogfv(GL_FOG_COLOR, fogColor);
-		glFogf(GL_FOG_DENSITY, 0.015f);
+		glFogf(GL_FOG_DENSITY, 0.010f);
 		glFogf(GL_FOG_START, 0.0f);
 		glFogf(GL_FOG_END, 200.0f);
 		glEnable(GL_FOG);
@@ -70,11 +70,16 @@ void resizeWindow (int width, int height){
 void drawFrame()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Kasowanie ekranu
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(kameraX, kameraY, kameraZ, kameraX + 100 * sin(kameraKat), 3 + kameraPunktY, kameraZ - 100 * cos(kameraKat), 0, 1, 0); // kamera
+	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+	glPushMatrix();
 
 	drawScene();
+	glMatrixMode(GL_MODELVIEW);
 
+	glPopMatrix();
 	glFlush();
 	glPopMatrix();
 	glutSwapBuffers(); 

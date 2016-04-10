@@ -72,7 +72,7 @@ void drawInit() {
 	map = planner.getArray();
 	mapWidth = planner.getWidth();
 	mapHeight = planner.getHeight();
-	tex_id1 = WczytajTeksture("szablon1.bmp");
+	tex_id1 = WczytajTeksture("szablon.bmp");
 }
 
 void drawRoof(int x, int y, int z) {

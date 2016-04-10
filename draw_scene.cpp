@@ -10,6 +10,7 @@ double spacing = 2.0;
 int tex_id1;
 
 void setGreyMaterial() {
+	glDisable(GL_BLEND);
 	GLfloat  matSpecular[4] = { 0,0,0,1 };
 	GLfloat  matAmbient[4] = { 0.2,0.2,0.2,1 };
 	GLfloat  matDiffuse[4] = { 1,1,1,1 };
@@ -24,6 +25,7 @@ void setGreyMaterial() {
 }
 
 void setPacmanMaterial() {
+	glDisable(GL_BLEND);
 	GLfloat  matSpecular[4] = { 1,1,1,1 };
 	GLfloat  matAmbient[4] = { 0.2,0.2,0.2,1 };
 	GLfloat  matDiffuse[4] = { .9,.9,.1,1 };
@@ -40,15 +42,27 @@ void setPacmanMaterial() {
 void setShinyMaterial() {
 	GLfloat  matSpecular[4] = { 1,1,.3,1 };
 	GLfloat  matAmbient[4] = { 1,1,0,1 };
-	GLfloat  matDiffuse[4] = { .5,.5,.4,1 };
+	GLfloat  matDiffuse[4] = { .5,.5,.4,.3 };
 	GLfloat  matEmission[4] = { 0,0,0,1 };
 	GLfloat  matShininess = 30;
+
+	//glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);  // w³¹czenie trybu koloryzacji materia³ów
+	//glEnable(GL_COLOR_MATERIAL); // teraz zmiana koloru materia³u nastêpuje poprzez zwykly glColor*()
+
 
 	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
 	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
 	glMateriali(GL_FRONT, GL_SHININESS, matShininess);
+
+	// pierwszy parametr:GL_ZERO, GL_ONE, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE.
+	// drugi parametr:GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA
+
+	//glEnable(GL_BLEND);
+	//glDepthMask(GL_FALSE);
+	//glBlendFunc(GL_ONE, GL_ONE);
+	//glDisable(GL_COLOR_MATERIAL);
 }
 
 
@@ -66,6 +80,7 @@ void drawRoof(int x, int y, int z) {
 	glMatrixMode(GL_TEXTURE);
 	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
 	glRotatef(90, 1, 0, 0);
+	glTranslatef(spacing / 2, 0, spacing/2);
 
 	glBindTexture(GL_TEXTURE_2D, tex_id1);
 
@@ -96,6 +111,10 @@ void drawScene() {
 
 	// Shift for all map
 	glTranslatef(0, 0, -50);
+
+
+
+
 
 	// Labirynth
 	glPushMatrix();
@@ -128,18 +147,16 @@ void drawScene() {
 		gluSphere(obiekt, .8, 50, 50);
 	glPopMatrix();
 
+
+
 	setGreyMaterial();
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
-			int x = (i - (mapWidth / 2))*spacing-spacing/2;
+			int x = (i - (mapWidth / 2))*spacing - spacing / 2;
 			int y = (j - (mapHeight / 2))*spacing - spacing / 2;
-			int z = map[i][j] == 1?spacing/2:-spacing/2;
+			int z = map[i][j] == 1 ? spacing / 2 : -spacing / 2;
 			drawRoof(x, y, z);
 		}
 	}
-
-	//glTranslatef(0, 5, 0);
-	//drawRoof();
-
 }
 

@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="szablon" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="Pacman" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=szablon - Win32 Debug
+CFG=Pacman - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "szablon.mak".
+!MESSAGE NMAKE /f "Pacman.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "szablon.mak" CFG="szablon - Win32 Debug"
+!MESSAGE NMAKE /f "Pacman.mak" CFG="Pacman - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "szablon - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "szablon - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "Pacman - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "Pacman - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=szablon - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "szablon - Win32 Release"
+!IF  "$(CFG)" == "Pacman - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD szablon.cpp /c
+# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD Pacman.cpp /c
 # ADD BASE RSC /l 0x410 /d "NDEBUG"
 # ADD RSC /l 0x410 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -52,7 +52,7 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib glaux.lib /nologo /subsystem:console /machine:I386
 
-!ELSEIF  "$(CFG)" == "szablon - Win32 Debug"
+!ELSEIF  "$(CFG)" == "Pacman - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -80,8 +80,8 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "szablon - Win32 Release"
-# Name "szablon - Win32 Debug"
+# Name "Pacman - Win32 Release"
+# Name "Pacman - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -107,11 +107,11 @@ SOURCE=.\rysowanie.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\szablon.cpp
+SOURCE=.\Pacman.cpp
 
-!IF  "$(CFG)" == "szablon - Win32 Release"
+!IF  "$(CFG)" == "Pacman - Win32 Release"
 
-!ELSEIF  "$(CFG)" == "szablon - Win32 Debug"
+!ELSEIF  "$(CFG)" == "Pacman - Win32 Debug"
 
 !ENDIF 
 

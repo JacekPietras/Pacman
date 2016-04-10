@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="szablon"
+	Name="Pacman"
 	ProjectGUID="{1481EC08-ACF8-4260-9B66-3676EF119EE8}"
-	RootNamespace="szablon"
+	RootNamespace="Pacman"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -39,7 +39,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Debug/szablon.tlb"
+				TypeLibraryName=".\Debug/Pacman.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
@@ -49,7 +49,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Debug/szablon.pch"
+				PrecompiledHeaderFile=".\Debug/Pacman.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -71,11 +71,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib opengl32.lib glu32.lib glut32.lib"
-				OutputFile=".\Debug/szablon.exe"
+				OutputFile=".\Debug/Pacman.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/szablon.pdb"
+				ProgramDatabaseFile=".\Debug/Pacman.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -93,7 +93,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/szablon.bsc"
+				OutputFile=".\Debug/Pacman.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -129,19 +129,19 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName=".\Release/szablon.tlb"
+				TypeLibraryName=".\Release/Pacman.tlb"
 				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="szablon.cpp"
+				AdditionalOptions="Pacman.cpp"
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/szablon.pch"
+				PrecompiledHeaderFile=".\Release/Pacman.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -162,10 +162,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile=".\Release/szablon.exe"
+				OutputFile=".\Release/Pacman.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/szablon.pdb"
+				ProgramDatabaseFile=".\Release/Pacman.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -183,7 +183,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/szablon.bsc"
+				OutputFile=".\Release/Pacman.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -304,7 +304,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="szablon.cpp"
+				RelativePath="Pacman.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

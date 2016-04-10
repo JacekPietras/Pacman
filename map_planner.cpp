@@ -72,7 +72,7 @@ int MapPlanner::BFS() {
 
 	if (type == 1) {
 		//laczenie niespojnego z losowym
-		printf("random\n");
+		//printf("random\n");
 		for (j = 0; j<height; ++j) {
 			for (i = 0; i<width; ++i) {
 				if (mapbfs[i][j] == 3) {
@@ -93,7 +93,7 @@ int MapPlanner::BFS() {
 	}
 	else {
 		//laczenie niespojnego z najblizszym
-		printf("near\n");
+		//printf("near\n");
 		int dist = (height + width) * 2;
 		for (j = 0; j<hheight + 1; ++j) {
 			for (i = 0; i<hwidth + 1; ++i) {
@@ -171,7 +171,7 @@ void MapPlanner::generate(void) {
 	for (int i = 0; i < width; ++i)
 		map[i] = new int[height];
 
-	printf("map constructed [%d][%d]\n", width, height);
+	//printf("map constructed [%d][%d]\n", width, height);
 
 	int i, j;
 	for (j = 0; j<height; ++j) {
@@ -195,6 +195,14 @@ void MapPlanner::generate(void) {
 
 int **MapPlanner::getArray(void) {
 	return map;
+}
+
+int MapPlanner::getWidth(void) {
+	return width;
+}
+
+int MapPlanner::getHeight(void) {
+	return height;
 }
 
 void MapPlanner::printSTD(void) {

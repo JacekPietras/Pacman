@@ -18,6 +18,8 @@ public:
 	MapPlanner(int width, int height, int pathType);
 	~MapPlanner();
 	int **getArray(void);
+	int getWidth(void);
+	int getHeight(void);
 	void printSTD(void);
 
 private:

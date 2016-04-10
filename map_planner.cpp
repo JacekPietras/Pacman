@@ -5,10 +5,7 @@
 
 #define WIDTH 21
 #define HEIGHT 9
-
-
-
-#define HOLE_PERCENT 0.02f
+#define HOLE_PERCENT 0.03f
 
 void MapPlanner::setPoint(int x, int y) {
 	if (x == posX && y == posY) return;

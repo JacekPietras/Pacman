@@ -132,8 +132,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="map_planner.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="map_planner.h" />
     <ClInclude Include="szablon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

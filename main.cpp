@@ -1,14 +1,8 @@
-/*
-
- OpenGL - szablon do æwiczeñ laboratoryjnych
- (C) Micha³ Turek.
-
-*/
-
 #include <windows.h>
 #include "glut.h"
 #include "szablon.h"
 #include <GL/glu.h>
+#include "map_planner.h"
 
 //Wymiary okna
 int screen_width=640;
@@ -92,6 +86,12 @@ void rysuj(void)
 
 int main(int argc, char **argv)
 {
+
+
+	MapPlanner planner(41, 31, 3);
+	planner.printSTD();
+
+
     // INIT - wszystkie funkcje obs³ugi okna i przetwzrzania zdarzeñ realizuje GLUT
 	glutInit(&argc, argv);    
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);

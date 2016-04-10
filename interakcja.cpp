@@ -22,17 +22,7 @@ double kameraPredkoscObrotu;
 double obszarKamery = 0;
 
 
-void resetKamery() {
-	kameraX = 0;
-	kameraY = 4;
-	kameraZ = 40;
-	kameraKat = -0.4;
-	kameraPunktY = -15;
-	kameraPredkoscPunktY = 0;
-	kameraPredkosc = 0;
-	kameraPredkoscObrotu = 0;
-	kameraPrzemieszczanie = true;
-}
+
 
 void SzablonPrzyciskMyszyWcisniety(int button, int state, int x, int y)
 {

@@ -7,7 +7,11 @@ MapPlanner planner(mapWidth, mapHeight);
 int **map;
 double spacing = 2.0;
 
+int tex_id0;
 int tex_id1;
+int tex_id2;
+int tex_id3;
+int tex_id4;
 
 void setGreyMaterial() {
 	glDisable(GL_BLEND);
@@ -72,17 +76,60 @@ void drawInit() {
 	map = planner.getArray();
 	mapWidth = planner.getWidth();
 	mapHeight = planner.getHeight();
-	tex_id1 = WczytajTeksture("szablon.bmp");
+	//tex_id1 = WczytajTeksture("szablon.bmp");
+	//tex_id4 = WczytajTeksture("szablon4.bmp");
 }
 
-void drawRoof(int x, int y, int z) {
-	setGreyMaterial();
+
+void drawCluster(double x, double y, double z, int how, int rot) {
+	double s = spacing / 3;
+
+	glMatrixMode(GL_TEXTURE);
+	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
+	glRotatef(90, 1, 0, 0);
+
+
+	if (how & 6 == 6)
+		glBindTexture(GL_TEXTURE_2D, tex_id4);
+	else if (how & 4 == 4)
+		glBindTexture(GL_TEXTURE_2D, tex_id3);
+	else if (how & 2 == 2)
+		glBindTexture(GL_TEXTURE_2D, tex_id2);
+	else if (how == 1)
+		glBindTexture(GL_TEXTURE_2D, tex_id1);
+	else
+		glBindTexture(GL_TEXTURE_2D, tex_id0);
+
+	glBegin(GL_QUADS);
+	glTexCoord3f(x, z, y);
+	glVertex3f(x, z, y);
+
+	glTexCoord3f(x, z, y + s);
+	glVertex3f(x, z, y + s);
+
+	glTexCoord3f(x + s, z, y + s);
+	glVertex3f(x + s, z, y + s);
+
+	glTexCoord3f(x + s, z, y);
+	glVertex3f(x + s, z, y);
+	glEnd();
+
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+}
+
+
+void drawRoof(int i, int j) {
+	double x = (i - (mapWidth / 2))*spacing - spacing / 2;
+	double y = (j - (mapHeight / 2))*spacing - spacing / 2;
+	double z = map[i][j] == 1 ? spacing / 2 : -spacing / 2;
+
 	glMatrixMode(GL_TEXTURE);
 	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
 	glRotatef(90, 1, 0, 0);
 	glTranslatef(spacing / 2, 0, spacing/2);
 
-	glBindTexture(GL_TEXTURE_2D, tex_id1);
+	glBindTexture(GL_TEXTURE_2D, tex_id4);
 
 	glBegin(GL_QUADS);
 	glTexCoord3f(x, z, y);
@@ -128,12 +175,12 @@ void drawScene() {
 			}
 			else if (map[i][j] == 1) {
 				setGreyMaterial();
-				//glutSolidCube(spacing);
+				glutSolidCube(spacing);
 			}
 
 			glTranslatef(0, -spacing, 0);
 				setGreyMaterial();
-				//glutSolidCube(spacing);
+				glutSolidCube(spacing);
 
 			glTranslatef(spacing, spacing, 0);
 		}
@@ -152,10 +199,7 @@ void drawScene() {
 	setGreyMaterial();
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
-			int x = (i - (mapWidth / 2))*spacing - spacing / 2;
-			int y = (j - (mapHeight / 2))*spacing - spacing / 2;
-			int z = map[i][j] == 1 ? spacing / 2 : -spacing / 2;
-			drawRoof(x, y, z);
+			//drawRoof(i, j);
 		}
 	}
 }

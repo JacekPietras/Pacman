@@ -108,6 +108,9 @@ int main(int argc, char **argv) {
 	glutDisplayFunc(drawFrame);							// def. funkcji rysuj¹cej
 	glutTimerFunc(10, syncTimer, 10);
 	setCamera();
+
+	drawInit();
+
 	glutMainLoop();
 	return(0);
 }

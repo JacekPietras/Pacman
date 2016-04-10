@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1481EC08-ACF8-4260-9B66-3676EF119EE8}</ProjectGuid>
     <RootNamespace>szablon</RootNamespace>
+    <ProjectName>szablon</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -134,7 +135,7 @@
     <ClCompile Include="interakcja.cpp" />
     <ClCompile Include="map_planner.cpp" />
     <ClCompile Include="rysowanie.cpp" />
-    <ClCompile Include="szablon.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="map_planner.h" />

@@ -21,10 +21,10 @@
     <ClCompile Include="rysowanie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="szablon.cpp">
+    <ClCompile Include="map_planner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="map_planner.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

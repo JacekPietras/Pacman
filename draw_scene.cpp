@@ -4,7 +4,11 @@
 int mapWidth = 20;
 int mapHeight = 20;
 
-void drawScene(GLUquadricObj *obiekt) {
+void drawScene() {
+	GLUquadricObj *obiekt = gluNewQuadric();
+	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
+	gluQuadricDrawStyle(obiekt, GLU_FILL);
+
 	glPushMatrix();
 	GLfloat  matSpecular[4] = { 1,1,1,1 };
 	GLfloat  matAmbient[4] = { 0.2,0.2,0.2,1 };

@@ -4,6 +4,6 @@
 #include <GL/glu.h>
 #include "glut.h"
 
-void drawScene(GLUquadricObj *obiekt);
+void drawScene();
 
 #endif

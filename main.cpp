@@ -1,10 +1,3 @@
-/*
-
- OpenGL - Szablon 3D do cwiczen laboratoryjnych
- (C) Micha³ Turek.
-
-*/
-
 #include <windows.h>
 #include "glut.h"
 #include <time.h>
@@ -15,14 +8,9 @@
 #define _INTERAKCJA
 #include "interakcja.cpp"
 
-	
 // Wymiary okna
 int oknoSzerkosc=1024;
 int oknoWysokosc=768;
-GLint oknoID = 1;
-
-GLUquadricObj *obiekt;
-
 
 void windowInit()
 {
@@ -71,7 +59,6 @@ void rozmiar (int width, int height)
     glMatrixMode(GL_MODELVIEW);
 }
 
-
 void rysuj()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Kasowanie ekranu
@@ -81,7 +68,7 @@ void rysuj()
 	glPopMatrix();
 	gluLookAt(kameraX, kameraY, kameraZ, kameraX + 100 * sin(kameraKat), 3 + kameraPunktY, kameraZ - 100 * cos(kameraKat), 0, 1, 0); // kamera
 
-	drawScene(obiekt);
+	drawScene();
 
 	glFlush();
 	glPopMatrix();
@@ -101,31 +88,27 @@ void syncTimer (int ID){
 	glutTimerFunc(1,syncTimer,10);
 }
 
-int main(int argc, char **argv)
-{
-//	ustalObszar(500);
+int main(int argc, char **argv) {
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 
-	glutInit(&argc, argv);    	// INIT - wszystkie funkcje obs³ugi okna i przetwzrzania zdarzeñ realizuje GLUT
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	
-		glutInitWindowSize(oknoSzerkosc,oknoWysokosc);
-		glutInitWindowPosition(0,0);
-		oknoID = glutCreateWindow("Pacman");  
-		windowInit();
-		glutReshapeFunc (rozmiar);						// def. obs³ugi zdarzenia resize (GLUT)
-		glutKeyboardFunc (KlawiszKlawiaturyWcisniety);		// def. obs³ugi klawiatury
-		glutSpecialFunc (KlawiszSpecjalnyWcisniety);		// def. obs³ugi klawiatury (klawisze specjalne)
-		glutMouseFunc (PrzyciskMyszyWcisniety); 			// def. obs³ugi zdarzenia przycisku myszy (GLUT)
-		glutMotionFunc (RuchKursoraMyszy);					// def. obs³ugi zdarzenia ruchu myszy (GLUT)
-		glutDisplayFunc(rysuj);								// def. funkcji rysuj¹cej
+	glutInitWindowSize(oknoSzerkosc, oknoWysokosc);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("Pacman");
+	windowInit();
+	glutReshapeFunc(rozmiar);						// def. obs³ugi zdarzenia resize (GLUT)
+	glutKeyboardFunc(KlawiszKlawiaturyWcisniety);	// def. obs³ugi klawiatury
+	glutSpecialFunc(KlawiszSpecjalnyWcisniety);		// def. obs³ugi klawiatury (klawisze specjalne)
+	glutMouseFunc(PrzyciskMyszyWcisniety); 			// def. obs³ugi zdarzenia przycisku myszy (GLUT)
+	glutMotionFunc(RuchKursoraMyszy);				// def. obs³ugi zdarzenia ruchu myszy (GLUT)
+	glutDisplayFunc(rysuj);							// def. funkcji rysuj¹cej
 
-		obiekt = gluNewQuadric();
-		gluQuadricOrientation(obiekt, GLU_OUTSIDE);
-		gluQuadricDrawStyle(obiekt, GLU_FILL);
-	
-		glutTimerFunc(10,syncTimer,10);
-		resetKamery();
-		//srand( (unsigned)time( NULL ) ); // generator liczb losowych
-		glutMainLoop();        
-	return(0);    
+
+
+	glutTimerFunc(10, syncTimer, 10);
+	resetKamery();
+	//srand( (unsigned)time( NULL ) ); // generator liczb losowych
+	glutMainLoop();
+	return(0);
 }
+

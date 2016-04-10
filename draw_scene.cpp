@@ -11,7 +11,10 @@ int tex_id0;
 int tex_id1;
 int tex_id2;
 int tex_id3;
+<<<<<<< HEAD
 int tex_id4;
+=======
+>>>>>>> 0167df586825a4563ff4209f19a463afcc890802
 
 void setGreyMaterial() {
 	glDisable(GL_BLEND);
@@ -76,14 +79,22 @@ void drawInit() {
 	map = planner.getArray();
 	mapWidth = planner.getWidth();
 	mapHeight = planner.getHeight();
+<<<<<<< HEAD
 	//tex_id1 = WczytajTeksture("szablon.bmp");
 	//tex_id4 = WczytajTeksture("szablon4.bmp");
+=======
+	tex_id0 = WczytajTeksture("szablon0.bmp");
+	tex_id1 = WczytajTeksture("szablon1.bmp");
+	tex_id2 = WczytajTeksture("szablon2.bmp");
+	tex_id3 = WczytajTeksture("szablon3.bmp");
+>>>>>>> 0167df586825a4563ff4209f19a463afcc890802
 }
 
 
 void drawCluster(double x, double y, double z, int how, int rot) {
 	double s = spacing / 3;
 
+<<<<<<< HEAD
 	glMatrixMode(GL_TEXTURE);
 	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
 	glRotatef(90, 1, 0, 0);
@@ -124,29 +135,52 @@ void drawRoof(int i, int j) {
 	double y = (j - (mapHeight / 2))*spacing - spacing / 2;
 	double z = map[i][j] == 1 ? spacing / 2 : -spacing / 2;
 
+=======
+>>>>>>> 0167df586825a4563ff4209f19a463afcc890802
 	glMatrixMode(GL_TEXTURE);
-	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
+	glScalef(1 / s, 1 / s, 1 / s);
 	glRotatef(90, 1, 0, 0);
-	glTranslatef(spacing / 2, 0, spacing/2);
 
+<<<<<<< HEAD
 	glBindTexture(GL_TEXTURE_2D, tex_id4);
+=======
+	glBindTexture(GL_TEXTURE_2D, tex_id0);
+>>>>>>> 0167df586825a4563ff4209f19a463afcc890802
 
 	glBegin(GL_QUADS);
 	glTexCoord3f(x, z, y);
 	glVertex3f(x, z, y);
 
-	glTexCoord3f(x, z, y + spacing);
-	glVertex3f(x, z, y + spacing);
+	glTexCoord3f(x, z, y + s);
+	glVertex3f(x, z, y + s);
 
-	glTexCoord3f(x+spacing, z, y + spacing);
-	glVertex3f(x+spacing, z, y+spacing);
+	glTexCoord3f(x + s, z, y + s);
+	glVertex3f(x + s, z, y + s);
 
-	glTexCoord3f(x+spacing, z, y);
-	glVertex3f(x+spacing, z, y);
+	glTexCoord3f(x + s, z, y);
+	glVertex3f(x + s, z, y);
 	glEnd();
 
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
+}
+void drawRoof(int i, int j) {
+	double x = (i - (mapWidth / 2))*spacing - spacing/2;
+	double y = (j - (mapHeight / 2))*spacing - spacing/2;
+	double z = map[i][j] == 1 ? spacing / 2 : -spacing / 2;
+	double s = spacing / 3;
+	int how = 0;
+	int rot = 0;
+
+	drawCluster(x, y, z, how, rot);
+	drawCluster(x + s, y, z, how, rot);
+	drawCluster(x + s + s, y, z, how, rot);
+	drawCluster(x, y + s, z, how, rot);
+	drawCluster(x + s + s, y + s, z, how, rot);
+	drawCluster(x, y + s + s, z, how, rot);
+	drawCluster(x + s, y + s + s, z, how, rot);
+	drawCluster(x + s + s, y + s + s, z, how, rot);
+	//drawCluster(x, y, z);
 }
 
 // Function fired every frame
@@ -157,11 +191,7 @@ void drawScene() {
 
 
 	// Shift for all map
-	glTranslatef(0, 0, -50);
-
-
-
-
+	glTranslatef(0, 0, -30);
 
 	// Labirynth
 	glPushMatrix();
@@ -194,12 +224,14 @@ void drawScene() {
 		gluSphere(obiekt, .8, 50, 50);
 	glPopMatrix();
 
-
-
 	setGreyMaterial();
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
+<<<<<<< HEAD
 			//drawRoof(i, j);
+=======
+			drawRoof(i, j);
+>>>>>>> 0167df586825a4563ff4209f19a463afcc890802
 		}
 	}
 }

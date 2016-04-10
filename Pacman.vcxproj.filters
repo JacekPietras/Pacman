@@ -18,18 +18,21 @@
     <ClCompile Include="interakcja.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rysowanie.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="map_planner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="draw_scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="map_planner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

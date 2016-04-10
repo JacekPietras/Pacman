@@ -134,10 +134,11 @@
   <ItemGroup>
     <ClCompile Include="interakcja.cpp" />
     <ClCompile Include="map_planner.cpp" />
-    <ClCompile Include="rysowanie.cpp" />
+    <ClCompile Include="draw_scene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="draw_scene.h" />
     <ClInclude Include="map_planner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

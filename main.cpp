@@ -11,16 +11,16 @@
 #include <math.h>
 #include <direct.h>
 #include <GL/glu.h>
+#include "draw_scene.h"
 #define _INTERAKCJA
 #include "interakcja.cpp"
+
 	
 // Wymiary okna
 int oknoSzerkosc=1024;
 int oknoWysokosc=768;
 GLint oknoID = 1;
 
-int mapWidth = 20;
-int mapHeight = 20;
 GLUquadricObj *obiekt;
 
 
@@ -81,10 +81,7 @@ void rysuj()
 	glPopMatrix();
 	gluLookAt(kameraX, kameraY, kameraZ, kameraX + 100 * sin(kameraKat), 3 + kameraPunktY, kameraZ - 100 * cos(kameraKat), 0, 1, 0); // kamera
 
-
-
-#define _RYSOWANIE
-#include "rysowanie.cpp"	// rysowanie 
+	drawScene(obiekt);
 
 	glFlush();
 	glPopMatrix();

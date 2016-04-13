@@ -16,7 +16,7 @@ int tex_id4;
 void setGreyMaterial() {
 	glDisable(GL_BLEND);
 	GLfloat  matSpecular[4] = { 0,0,0,1 };
-	GLfloat  matAmbient[4] = { 0.2,0.2,0.2,1 };
+	GLfloat  matAmbient[4] = { 0.5,0.5,0.5,1 };
 	GLfloat  matDiffuse[4] = { 1,1,1,1 };
 	GLfloat  matEmission[4] = { 0,0,0,1 };
 	GLfloat  matShininess = 10;
@@ -83,7 +83,7 @@ void drawInit() {
 
 
 void drawCluster(double x, double y, double z, int how, int rot) {
-	double s = spacing / 3;
+	double s = spacing / 2;
 	glMatrixMode(GL_TEXTURE);
 	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
 	glRotatef(90, 1, 0, 0);
@@ -118,52 +118,20 @@ void drawCluster(double x, double y, double z, int how, int rot) {
 	glLoadIdentity();
 }
 
-/*
 void drawRoof(int i, int j) {
-	double x = (i - (mapWidth / 2))*spacing - spacing / 2;
-	double y = (j - (mapHeight / 2))*spacing - spacing / 2;
-	double z = map[i][j] == 1 ? spacing / 2 : -spacing / 2;
-
-	glMatrixMode(GL_TEXTURE);
-	glScalef(1 / s, 1 / s, 1 / s);
-	glRotatef(90, 1, 0, 0);
-
-	glBindTexture(GL_TEXTURE_2D, tex_id4);
-
-	glBegin(GL_QUADS);
-	glTexCoord3f(x, z, y);
-	glVertex3f(x, z, y);
-
-	glTexCoord3f(x, z, y + s);
-	glVertex3f(x, z, y + s);
-
-	glTexCoord3f(x + s, z, y + s);
-	glVertex3f(x + s, z, y + s);
-
-	glTexCoord3f(x + s, z, y);
-	glVertex3f(x + s, z, y);
-	glEnd();
-
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-}*/
-void drawRoof(int i, int j) {
-	double x = (i - (mapWidth / 2))*spacing - spacing/2;
-	double y = (j - (mapHeight / 2))*spacing - spacing/2;
-	double z = map[i][j] == 1 ? spacing / 2 : -spacing / 2;
-	double s = spacing / 3;
+	double s = spacing / 2;
+	double x = (i - (mapWidth / 2))*spacing - s;
+	double y = (j - (mapHeight / 2))*spacing - s;
+	double z = map[i][j] == 1 ? s : -s;
 	int how = 0;
 	int rot = 0;
 
+	setGreyMaterial();
 	drawCluster(x, y, z, how, rot);
 	drawCluster(x + s, y, z, how, rot);
-	drawCluster(x + s + s, y, z, how, rot);
 	drawCluster(x, y + s, z, how, rot);
-	drawCluster(x + s + s, y + s, z, how, rot);
-	drawCluster(x, y + s + s, z, how, rot);
-	drawCluster(x + s, y + s + s, z, how, rot);
-	drawCluster(x + s + s, y + s + s, z, how, rot);
-	//drawCluster(x, y, z);
+	setPacmanMaterial();
+	drawCluster(x + s, y + s, z, how, rot);
 }
 
 // Function fired every frame

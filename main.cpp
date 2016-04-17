@@ -57,7 +57,7 @@ void windowInit() {
 void resizeWindow (int width, int height){
 	if (width==0) width++;
 	if (width==0) width++;
-	oknoSzerkosc=width;   // przy stereo nie mo¿na zmieniaæ rozmiaru
+	oknoSzerkosc=width;
 	oknoWysokosc=height; 
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
     glViewport(0,0,oknoSzerkosc,oknoWysokosc+24); 

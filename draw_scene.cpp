@@ -13,6 +13,8 @@ int tex_id2;
 int tex_id3;
 int tex_id4;
 
+
+
 void setGreyMaterial() {
 	glDisable(GL_BLEND);
 	GLfloat  matSpecular[4] = { 0,0,0,1 };
@@ -77,28 +79,40 @@ void drawInit() {
 	mapWidth = planner.getWidth();
 	mapHeight = planner.getHeight();
 
-	//tex_id1 = WczytajTeksture("szablon.bmp");
-	//tex_id4 = WczytajTeksture("szablon4.bmp");
+	tex_id0 = WczytajTeksture("szablon0.bmp");
+	tex_id1 = WczytajTeksture("szablon1.bmp");
+	tex_id2 = WczytajTeksture("szablon2.bmp");
+	tex_id3 = WczytajTeksture("szablon3.bmp");
+	tex_id4 = WczytajTeksture("szablon4.bmp");
 }
 
 
 void drawCluster(double x, double y, double z, int how, int rot) {
 	double s = spacing / 2;
 	glMatrixMode(GL_TEXTURE);
-	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
+	glScalef(1 / s, 1 / s, 1 / s);
 	glRotatef(90, 1, 0, 0);
+	glRotatef(rot, 0, 1, 0);
 
 
-	if (how & 6 == 6)
-		glBindTexture(GL_TEXTURE_2D, tex_id4);
-	else if (how & 4 == 4)
-		glBindTexture(GL_TEXTURE_2D, tex_id3);
-	else if (how & 2 == 2)
-		glBindTexture(GL_TEXTURE_2D, tex_id2);
-	else if (how == 1)
-		glBindTexture(GL_TEXTURE_2D, tex_id1);
-	else
+	switch (how) {
+	case 0:
 		glBindTexture(GL_TEXTURE_2D, tex_id0);
+		break;
+	case 1:
+		glBindTexture(GL_TEXTURE_2D, tex_id1);
+		break;
+	case 2:
+	case 3:
+		glBindTexture(GL_TEXTURE_2D, tex_id2);
+		break;
+	case 4:
+	case 5:
+		glBindTexture(GL_TEXTURE_2D, tex_id3);
+		break;
+	default:
+		glBindTexture(GL_TEXTURE_2D, tex_id4);
+	}
 
 	glBegin(GL_QUADS);
 	glTexCoord3f(x, z, y);
@@ -122,16 +136,57 @@ void drawRoof(int i, int j) {
 	double s = spacing / 2;
 	double x = (i - (mapWidth / 2))*spacing - s;
 	double y = (j - (mapHeight / 2))*spacing - s;
-	double z = map[i][j] == 1 ? s : -s;
-	int how = 0;
-	int rot = 0;
+	double z = s;
 
-	setGreyMaterial();
-	drawCluster(x, y, z, how, rot);
-	drawCluster(x + s, y, z, how, rot);
-	drawCluster(x, y + s, z, how, rot);
-	setPacmanMaterial();
-	drawCluster(x + s, y + s, z, how, rot);
+	if (map[i][j] != 1) {
+		z = -s;
+		int how = 0;
+		int rot = 0;
+
+		how = 0;
+		if (map[i-1][j-1] == 1)
+			how += 1;
+		if (map[ i ][j-1] == 1)
+			how += 2;
+		if (map[i-1][ j ] == 1)
+			how += 4;
+		drawCluster(x, y, z, how, rot);
+
+		how = 0;
+		rot = 90;
+		if (map[i+1][j-1] == 1)
+			how += 1;
+		if (map[ i ][j-1] == 1)
+			how += 4;
+		if (map[i+1][ j ] == 1)
+			how += 2;
+		drawCluster(x + s, y, z, how, rot);
+
+		how = 0;
+		rot = 270;
+		if (map[i-1][j+1] == 1)
+			how += 1;
+		if (map[ i ][j+1] == 1)
+			how += 4;
+		if (map[i-1][ j ] == 1)
+			how += 2;
+		drawCluster(x, y + s, z, how, rot);
+
+		how = 0;
+		rot = 180;
+		if (map[i+1][j+1] == 1)
+			how += 1;
+		if (map[ i ][j+1] == 1)
+			how += 2;
+		if (map[i+1][ j ] == 1)
+			how += 4;
+		drawCluster(x + s, y + s, z, how, rot);
+	} else {
+		drawCluster(x, y, z, 0, 0);
+		drawCluster(x + s, y, z, 0, 0);
+		drawCluster(x, y + s, z, 0, 0);
+		drawCluster(x + s, y + s, z, 0, 0);
+	}
 }
 
 // Function fired every frame
@@ -152,7 +207,7 @@ void drawScene() {
 		for (int i = 0; i<mapWidth; ++i) {
 			if (map[i][j] == 3) {
 				setShinyMaterial();
-				gluSphere(obiekt, .3f, 50, 50);
+				//gluSphere(obiekt, .3f, 50, 50);
 			}
 			else if (map[i][j] == 1) {
 				setGreyMaterial();
@@ -181,5 +236,6 @@ void drawScene() {
 			drawRoof(i, j);
 		}
 	}
+
 }
 

@@ -9,12 +9,17 @@ MapPlanner planner(mapWidth, mapHeight);
 int **map;
 double spacing = 2.0;
 
-int tex_id0;
-int tex_id1;
-int tex_id2;
-int tex_id3;
-int tex_id4;
-int tex_id_side;
+int roof_id0;
+int roof_id1;
+int roof_id2;
+int roof_id3;
+int roof_id4;
+int floor_id0;
+int floor_id1;
+int floor_id2;
+int floor_id3;
+int floor_id4;
+int side_id;
 
 
 
@@ -82,12 +87,18 @@ void drawInit() {
 	mapWidth = planner.getWidth();
 	mapHeight = planner.getHeight();
 
-	tex_id0 = WczytajTeksture("szablon0.bmp");
-	tex_id1 = WczytajTeksture("szablon1.bmp");
-	tex_id2 = WczytajTeksture("szablon2.bmp");
-	tex_id3 = WczytajTeksture("szablon3.bmp");
-	tex_id4 = WczytajTeksture("szablon4.bmp");
-	tex_id_side = WczytajTeksture("szablonside.bmp");
+	floor_id0 = WczytajTeksture("floor0.bmp");
+	floor_id1 = WczytajTeksture("floor1.bmp");
+	floor_id2 = WczytajTeksture("floor2.bmp");
+	floor_id3 = WczytajTeksture("floor3.bmp");
+	floor_id4 = WczytajTeksture("floor4.bmp");
+
+	roof_id0 = WczytajTeksture("roof0.bmp");
+	roof_id1 = WczytajTeksture("roof1.bmp");
+	roof_id2 = WczytajTeksture("roof2.bmp");
+	roof_id3 = WczytajTeksture("roof3.bmp");
+	roof_id4 = WczytajTeksture("roof4.bmp");
+	side_id = WczytajTeksture("side.bmp");
 }
 
 
@@ -100,24 +111,45 @@ void drawCluster(double x, double y, double z, int how, int rot) {
 	glTranslatef(shift, 0, shift);
 	glRotatef(rot, 0, 1, 0);
 
-
+	if (z < 0) {
 	switch (how) {
 	case 0:
-		glBindTexture(GL_TEXTURE_2D, tex_id0);
+		glBindTexture(GL_TEXTURE_2D, floor_id0);
 		break;
 	case 1:
-		glBindTexture(GL_TEXTURE_2D, tex_id1);
+		glBindTexture(GL_TEXTURE_2D, floor_id1);
 		break;
 	case 2:
 	case 3:
-		glBindTexture(GL_TEXTURE_2D, tex_id2);
+		glBindTexture(GL_TEXTURE_2D, floor_id2);
 		break;
 	case 4:
 	case 5:
-		glBindTexture(GL_TEXTURE_2D, tex_id3);
+		glBindTexture(GL_TEXTURE_2D, floor_id3);
 		break;
 	default:
-		glBindTexture(GL_TEXTURE_2D, tex_id4);
+		glBindTexture(GL_TEXTURE_2D, floor_id4);
+	}
+}
+	else {
+		switch (how) {
+		case 0:
+			glBindTexture(GL_TEXTURE_2D, roof_id0);
+			break;
+		case 1:
+			glBindTexture(GL_TEXTURE_2D, roof_id1);
+			break;
+		case 2:
+		case 3:
+			glBindTexture(GL_TEXTURE_2D, roof_id2);
+			break;
+		case 4:
+		case 5:
+			glBindTexture(GL_TEXTURE_2D, roof_id3);
+			break;
+		default:
+			glBindTexture(GL_TEXTURE_2D, roof_id4);
+		}
 	}
 
 	glBegin(GL_QUADS);
@@ -150,7 +182,7 @@ void drawSide(double x, double y, double z, int rot) {
 	double sr = spacing*sin(rot*M_PI/180);
 	double cr = spacing *cos(rot*M_PI / 180);
 
-	glBindTexture(GL_TEXTURE_2D, tex_id_side);
+	glBindTexture(GL_TEXTURE_2D, side_id);
 
 	glBegin(GL_QUADS);
 	glTexCoord3f(x, z, y);
@@ -171,16 +203,16 @@ void drawSide(double x, double y, double z, int rot) {
 
 }
 
-void drawRoof(int i, int j) {
+void drawWall(int i, int j) {
 	double s = spacing / 2;
 	double x = (i - (mapWidth / 2))*spacing - s;
 	double y = (j - (mapHeight / 2))*spacing - s;
 	double z = s;
 	int rot = 0;
+	int how = 0;
 
 	if (map[i][j] != 1) {
 		z = -s;
-		int how = 0;
 
 		how = 0;
 		rot = 0;
@@ -222,10 +254,52 @@ void drawRoof(int i, int j) {
 			how += 4;
 		drawCluster(x + spacing - s, y + spacing - s, z, how, rot);
 	} else {
-		drawCluster(x, y, z, 0, 0);
-		drawCluster(x + spacing - s, y, z, 0, 0);
-		drawCluster(x, y + spacing - s, z, 0, 0);
-		drawCluster(x + spacing - s, y + spacing - s, z, 0, 0);
+		how = 0;
+		rot = 0;
+		if (i==0 || j==0 || map[i - 1][j - 1] != 1)
+			how += 1;
+		if (j==0 || map[i][j - 1] != 1)
+			how += 2;
+		if (i==0||map[i - 1][j] != 1)
+			how += 4;
+		drawCluster(x, y, z, how, rot);
+
+		
+		how = 0;
+		rot = 90;
+		if (i == mapWidth - 1 || j == 0 || map[i + 1][j - 1] != 1)
+			how += 1;
+		if (j == 0 || map[i][j - 1] != 1)
+			how += 4;
+		if (i == mapWidth - 1 || map[i + 1][j] != 1)
+			how += 2;
+		drawCluster(x + spacing - s, y, z, how, rot);
+
+		how = 0;
+		rot = 270;
+		if (j == mapHeight -1 ||i==0 ||map[i - 1][j + 1] != 1)
+			how += 1;
+		if (j == mapHeight -1 ||map[i][j + 1] != 1)
+			how += 4;
+		if (i==0 ||map[i - 1][j] != 1)
+			how += 2;
+		drawCluster(x, y + spacing - s, z, how, rot);
+
+		how = 0;
+		rot = 180;
+		if (j == mapHeight -1 ||i == mapWidth -1 ||map[i + 1][j + 1] != 1)
+			how += 1;
+		if (j == mapHeight -1 ||map[i][j + 1] != 1)
+			how += 2;
+		if (i == mapWidth -1 ||map[i + 1][j] != 1)
+			how += 4;
+		drawCluster(x + spacing - s, y + spacing - s, z, how, rot);
+
+
+
+
+
+
 		if(j==0 || map[i][j-1]!=1)
 			drawSide(x, y, -z,90);
 
@@ -284,7 +358,7 @@ void drawScene() {
 	setGreyMaterial();
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
-			drawRoof(i, j);
+			drawWall(i, j);
 		}
 	}
 

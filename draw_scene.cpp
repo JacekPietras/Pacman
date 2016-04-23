@@ -315,7 +315,7 @@ void drawWall(int i, int j) {
 }
 
 // Function fired every frame
-void drawScene() {
+void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	GLUquadricObj *obiekt = gluNewQuadric();
 	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
 	gluQuadricDrawStyle(obiekt, GLU_FILL);
@@ -351,6 +351,7 @@ void drawScene() {
 
 	//Pacman
 	glPushMatrix();
+		glTranslatef(pacmanPosX, 0, pacmanPosZ);
 		setPacmanMaterial();
 		gluSphere(obiekt, .8, 50, 50);
 	glPopMatrix();

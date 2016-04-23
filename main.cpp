@@ -13,6 +13,9 @@ int oknoSzerkosc=1024;
 int oknoWysokosc=768;
 bool fog = true;
 
+GLfloat pacmanPosX = 0.0f, pacmanPosZ = 0.0f;
+
+
 void setCamera() {
 	kameraX = 0;
 	kameraY = 15;
@@ -76,7 +79,8 @@ void drawFrame()
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
 	glPushMatrix();
 
-	drawScene();
+	handleMovement(pacmanPosX, pacmanPosZ);
+	drawScene(pacmanPosX, pacmanPosZ);
 	glMatrixMode(GL_MODELVIEW);
 
 	glPopMatrix();
@@ -105,12 +109,13 @@ int main(int argc, char **argv) {
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Pacman");
 	windowInit();
-	glutReshapeFunc(resizeWindow);						// def. obs³ugi zdarzenia resize (GLUT)
-	glutKeyboardFunc(KlawiszKlawiaturyWcisniety);	// def. obs³ugi klawiatury
+	glutReshapeFunc(resizeWindow);					// def. obs³ugi zdarzenia resize (GLUT)
+	glutKeyboardFunc(onKeyDown);					// def. obs³ugi klawiatury
+	glutKeyboardUpFunc(onKeyUp);
 	glutSpecialFunc(KlawiszSpecjalnyWcisniety);		// def. obs³ugi klawiatury (klawisze specjalne)
 	glutMouseFunc(PrzyciskMyszyWcisniety); 			// def. obs³ugi zdarzenia przycisku myszy (GLUT)
 	glutMotionFunc(RuchKursoraMyszy);				// def. obs³ugi zdarzenia ruchu myszy (GLUT)
-	glutDisplayFunc(drawFrame);							// def. funkcji rysuj¹cej
+	glutDisplayFunc(drawFrame);						// def. funkcji rysuj¹cej
 	glutTimerFunc(10, syncTimer, 10);
 	setCamera();
 

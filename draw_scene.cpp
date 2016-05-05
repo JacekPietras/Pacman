@@ -20,6 +20,7 @@ int floor_id2;
 int floor_id3;
 int floor_id4;
 int side_id;
+int energy_id;
 
 
 
@@ -99,6 +100,8 @@ void drawInit() {
 	roof_id3 = WczytajTeksture("roof3.bmp");
 	roof_id4 = WczytajTeksture("roof4.bmp");
 	side_id = WczytajTeksture("side.bmp");
+
+	energy_id = WczytajTeksture("energy.bmp");
 }
 
 
@@ -171,7 +174,6 @@ void drawCluster(double x, double y, double z, int how, int rot) {
 	glLoadIdentity();
 }
 
-
 void drawSide(double x, double y, double z, int rot) {
 	double shift = -0.005;
 	glMatrixMode(GL_TEXTURE);
@@ -206,7 +208,6 @@ void drawSide(double x, double y, double z, int rot) {
 
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
-
 }
 
 void drawWall(int i, int j) {
@@ -334,19 +335,29 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
 			if (map[i][j] == 3) {
+				GLint list[1];
 				setShinyMaterial();
+
+				glNewList(list[0], GL_COMPILE);
+
+				gluQuadricDrawStyle(obiekt, GLU_FILL);
+				gluQuadricNormals(obiekt, GLU_SMOOTH);
+				gluQuadricOrientation(obiekt, GLU_OUTSIDE);
+				gluQuadricTexture(obiekt, GL_TRUE);
+
+				glMatrixMode(GL_TEXTURE);
+				glBindTexture(GL_TEXTURE_2D, energy_id);
+
+
+
 				gluSphere(obiekt, .3f, 50, 50);
-			}
-			else if (map[i][j] == 1) {
-				setGreyMaterial();
-				//glutSolidCube(spacing);
+
+				glEndList();
+
+
 			}
 
-			glTranslatef(0, -spacing, 0);
-				setGreyMaterial();
-				//glutSolidCube(spacing);
-
-			glTranslatef(spacing, spacing, 0);
+			glTranslatef(spacing, 0, 0);
 		}
 		glTranslatef(-mapWidth* spacing, 0, spacing);
 	}
@@ -365,6 +376,5 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 			drawWall(i, j);
 		}
 	}
-
 }
 

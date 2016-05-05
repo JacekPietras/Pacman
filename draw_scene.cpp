@@ -153,17 +153,18 @@ void drawCluster(double x, double y, double z, int how, int rot) {
 	}
 
 	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 1.0f, 0.0f);
 	glTexCoord3f(x, z, y);
 	glVertex3f(x, z, y);
 
-	glTexCoord3f(x, z, y + s);
-	glVertex3f(x, z, y + s);
+	glTexCoord3f(x + s, z, y);
+	glVertex3f(x + s, z, y);
 
 	glTexCoord3f(x + s, z, y + s);
 	glVertex3f(x + s, z, y + s);
 
-	glTexCoord3f(x + s, z, y);
-	glVertex3f(x + s, z, y);
+	glTexCoord3f(x, z, y + s);
+	glVertex3f(x, z, y + s);
 	glEnd();
 
 	glMatrixMode(GL_TEXTURE);
@@ -179,12 +180,17 @@ void drawSide(double x, double y, double z, int rot) {
 	glTranslatef(spacing / 2, spacing / 2, 0);
 	glRotatef(270+rot, 0, 1, 0);
 
-	double sr = spacing*sin(rot*M_PI/180);
-	double cr = spacing *cos(rot*M_PI / 180);
+	double sr = sin(rot*M_PI/180);
+	double cr = cos(rot*M_PI / 180);
 
 	glBindTexture(GL_TEXTURE_2D, side_id);
 
 	glBegin(GL_QUADS);
+	glNormal3f(sr, 0.0f, cr);
+	
+	sr *= spacing;
+	cr *= spacing;
+
 	glTexCoord3f(x, z, y);
 	glVertex3f(x, z, y);
 
@@ -211,7 +217,7 @@ void drawWall(int i, int j) {
 	int rot = 0;
 	int how = 0;
 
-	if (map[i][j] != 1) {
+	if (map[i][j] != 1) { // floor
 		z = -s;
 
 		how = 0;
@@ -223,7 +229,7 @@ void drawWall(int i, int j) {
 		if (map[i-1][ j ] == 1)
 			how += 4;
 		drawCluster(x, y, z, how, rot);
-
+		
 		how = 0;
 		rot = 90;
 		if (map[i+1][j-1] == 1)
@@ -254,6 +260,7 @@ void drawWall(int i, int j) {
 			how += 4;
 		drawCluster(x + spacing - s, y + spacing - s, z, how, rot);
 	} else {
+		//roof
 		how = 0;
 		rot = 0;
 		if (i==0 || j==0 || map[i - 1][j - 1] != 1)
@@ -263,7 +270,6 @@ void drawWall(int i, int j) {
 		if (i==0||map[i - 1][j] != 1)
 			how += 4;
 		drawCluster(x, y, z, how, rot);
-
 		
 		how = 0;
 		rot = 90;
@@ -295,14 +301,11 @@ void drawWall(int i, int j) {
 			how += 4;
 		drawCluster(x + spacing - s, y + spacing - s, z, how, rot);
 
-
-
-
-
+		// sides
 
 		if(j==0 || map[i][j-1]!=1)
 			drawSide(x, y, -z,90);
-
+		
 		if (j == mapHeight -1 || map[i][j + 1] != 1)
 			drawSide(x, y+spacing, -z,90);
 

@@ -31,11 +31,11 @@ void setGreyMaterial() {
 	GLfloat  matEmission[4] = { 0,0,0,1 };
 	GLfloat  matShininess = 10;
 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
-	glMateriali(GL_FRONT, GL_SHININESS, matShininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmission);
+	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
 }
 
 void setPacmanMaterial() {
@@ -46,11 +46,11 @@ void setPacmanMaterial() {
 	GLfloat  matEmission[4] = { 0,0,0,1 };
 	GLfloat  matShininess = 50;
 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
-	glMateriali(GL_FRONT, GL_SHININESS, matShininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmission);
+	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
 }
 
 void setShinyMaterial() {
@@ -64,11 +64,11 @@ void setShinyMaterial() {
 	//glEnable(GL_COLOR_MATERIAL); // teraz zmiana koloru materia³u nastêpuje poprzez zwykly glColor*()
 
 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
-	glMateriali(GL_FRONT, GL_SHININESS, matShininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmission);
+	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
 
 	// pierwszy parametr:GL_ZERO, GL_ONE, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE.
 	// drugi parametr:GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA
@@ -188,14 +188,14 @@ void drawSide(double x, double y, double z, int rot) {
 	glTexCoord3f(x, z, y);
 	glVertex3f(x, z, y);
 
-	glTexCoord3f(x, z + spacing, y);
-	glVertex3f(x, z + spacing, y);
+	glTexCoord3f(x + sr, z, y+cr);
+	glVertex3f(x + sr, z, y+cr);
 
 	glTexCoord3f(x + sr, z + spacing, y+cr);
 	glVertex3f(x + sr, z + spacing, y+cr);
 
-	glTexCoord3f(x + sr, z, y+cr);
-	glVertex3f(x + sr, z, y+cr);
+	glTexCoord3f(x, z + spacing, y);
+	glVertex3f(x, z + spacing, y);
 	glEnd();
 
 	glMatrixMode(GL_TEXTURE);
@@ -332,7 +332,7 @@ void drawScene() {
 		for (int i = 0; i<mapWidth; ++i) {
 			if (map[i][j] == 3) {
 				setShinyMaterial();
-				//gluSphere(obiekt, .3f, 50, 50);
+				gluSphere(obiekt, .3f, 50, 50);
 			}
 			else if (map[i][j] == 1) {
 				setGreyMaterial();

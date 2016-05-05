@@ -55,11 +55,11 @@ void setPacmanMaterial() {
 }
 
 void setShinyMaterial() {
-	GLfloat  matSpecular[4] = { 1,1,.3,1 };
+	GLfloat  matSpecular[4] = { 1,1,0,1 };
 	GLfloat  matAmbient[4] = { 1,1,0,1 };
-	GLfloat  matDiffuse[4] = { .5,.5,.4,.3 };
+	GLfloat  matDiffuse[4] = { 1,1,0,1 };
 	GLfloat  matEmission[4] = { 0,0,0,1 };
-	GLfloat  matShininess = 30;
+	GLfloat  matShininess = 50;
 
 	//glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);  // w³¹czenie trybu koloryzacji materia³ów
 	//glEnable(GL_COLOR_MATERIAL); // teraz zmiana koloru materia³u nastêpuje poprzez zwykly glColor*()
@@ -328,6 +328,37 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	// Shift for all map
 	glTranslatef(0, 0, -30);
 
+
+	/*
+	glPushMatrix();
+
+
+	GLint list[50];
+	setShinyMaterial();
+
+	glNewList(list[0], GL_COMPILE);
+
+	gluQuadricDrawStyle(obiekt, GLU_FILL);
+	gluQuadricNormals(obiekt, GLU_SMOOTH);
+	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
+	gluQuadricTexture(obiekt, GL_TRUE);
+
+	glMatrixMode(GL_TEXTURE);
+	glBindTexture(GL_TEXTURE_2D, energy_id);
+
+
+	glEndList();
+
+
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+
+
+
+	glPopMatrix();
+	*/
+
+
 	// Labirynth
 	glPushMatrix();
 	glTranslatef(-mapWidth / 2 * spacing, 0, - mapHeight / 2 * spacing);
@@ -335,26 +366,19 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
 			if (map[i][j] == 3) {
-				GLint list[1];
+				glPushMatrix();
 				setShinyMaterial();
 
-				glNewList(list[0], GL_COMPILE);
-
+				glMatrixMode(GL_TEXTURE);
+				glMatrixMode(GL_MODELVIEW);
+				glBindTexture(GL_TEXTURE_2D, energy_id);
 				gluQuadricDrawStyle(obiekt, GLU_FILL);
 				gluQuadricNormals(obiekt, GLU_SMOOTH);
 				gluQuadricOrientation(obiekt, GLU_OUTSIDE);
 				gluQuadricTexture(obiekt, GL_TRUE);
 
-				glMatrixMode(GL_TEXTURE);
-				glBindTexture(GL_TEXTURE_2D, energy_id);
-
-
-
 				gluSphere(obiekt, .3f, 50, 50);
-
-				glEndList();
-
-
+				glPopMatrix();
 			}
 
 			glTranslatef(spacing, 0, 0);

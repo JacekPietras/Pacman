@@ -39,7 +39,7 @@ void windowInit() {
 
 	GLfloat  diffuse[4] = { 0.9,0.9,0.9,1 };
 	GLfloat  specular[4] = { 0.9,0.9,0.9,1 };
-	GLfloat	 position[4] = { 30,30,-30,1 };
+	GLfloat	 position[4] = { 30,30,30,1 };
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);

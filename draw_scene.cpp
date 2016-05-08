@@ -36,6 +36,7 @@ int side_2_id;
 int side_3_id;
 
 int energy_id;
+int pacman_id;
 
 
 
@@ -58,7 +59,7 @@ void setPacmanMaterial() {
 	glDisable(GL_BLEND);
 	GLfloat  matSpecular[4] = { 1,1,1,1 };
 	GLfloat  matAmbient[4] = { 0.2,0.2,0.2,1 };
-	GLfloat  matDiffuse[4] = { .9,.9,.1,1 };
+	GLfloat  matDiffuse[4] = { .9,.9,.9,1 };
 	GLfloat  matEmission[4] = { 0,0,0,1 };
 	GLfloat  matShininess = 50;
 
@@ -70,10 +71,10 @@ void setPacmanMaterial() {
 }
 
 void setShinyMaterial() {
-	GLfloat  matSpecular[4] = { 1,1,0,1 };
-	GLfloat  matAmbient[4] = { 1,1,0,1 };
-	GLfloat  matDiffuse[4] = { 1,1,0,1 };
-	GLfloat  matEmission[4] = { 0,0,0,1 };
+	GLfloat  matSpecular[4] = { 1,1,1,1 };
+	GLfloat  matAmbient[4] = { 1,1,1,1 };
+	GLfloat  matDiffuse[4] = { 1,1,1,1 };
+	GLfloat  matEmission[4] = { 1,1,1,1 };
 	GLfloat  matShininess = 50;
 
 	//glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);  // w³¹czenie trybu koloryzacji materia³ów
@@ -131,6 +132,7 @@ void drawInit() {
 	side_3_id = WczytajTeksture("side_3.bmp");
 
 	energy_id = WczytajTeksture("energy.bmp");
+	pacman_id = WczytajTeksture("pacman.bmp");
 }
 
 
@@ -458,8 +460,21 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	//Pacman
 	glPushMatrix();
 		glTranslatef(pacmanPosX, 0, pacmanPosZ);
+
+		glPushMatrix();
 		setPacmanMaterial();
+
+		glMatrixMode(GL_TEXTURE);
+		glMatrixMode(GL_MODELVIEW);
+		glBindTexture(GL_TEXTURE_2D, pacman_id);
+		gluQuadricDrawStyle(obiekt, GLU_FILL);
+		gluQuadricNormals(obiekt, GLU_SMOOTH);
+		gluQuadricOrientation(obiekt, GLU_OUTSIDE);
+		gluQuadricTexture(obiekt, GL_TRUE);
+
 		gluSphere(obiekt, .8, 50, 50);
+		glPopMatrix();
+
 	glPopMatrix();
 
 	setGreyMaterial();

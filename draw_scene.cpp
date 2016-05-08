@@ -37,6 +37,7 @@ int side_3_id;
 
 int energy_id;
 int pacman_id;
+int shadow_id;
 
 
 
@@ -133,8 +134,46 @@ void drawInit() {
 
 	energy_id = WczytajTeksture("energy.bmp");
 	pacman_id = WczytajTeksture("pacman.bmp");
+	shadow_id = WczytajTeksture("shadow.bmp");
 }
 
+void drawShadow(double x, double y) {
+	glPushMatrix();
+	double s = spacing;
+	double z = -spacing / 2+0.05;
+
+	x -= spacing / 2;
+	y -= spacing / 2;
+
+
+	glMatrixMode(GL_TEXTURE);
+	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
+	glRotatef(90, 1, 0, 0);
+	glTranslatef(spacing / 2, spacing / 2, spacing / 2);
+	glBindTexture(GL_TEXTURE_2D, shadow_id);
+
+
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 1.0f, 0.0f);
+	glTexCoord3f(x, z, y);
+	glVertex3f(x, z, y);
+
+	glTexCoord3f(x + s, z, y);
+	glVertex3f(x + s, z, y);
+
+	glTexCoord3f(x + s, z, y + s);
+	glVertex3f(x + s, z, y + s);
+
+	glTexCoord3f(x, z, y + s);
+	glVertex3f(x, z, y + s);
+	glEnd();
+
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+	glPopMatrix();
+
+
+}
 
 void drawCluster(double x, double y, double z, int how, int rot, int textureType) {
 	double s = spacing / 2;
@@ -455,6 +494,10 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 		}
 		glTranslatef(-mapWidth* spacing, 0, spacing);
 	}
+	glPopMatrix();
+
+	glPushMatrix();
+	drawShadow(pacmanPosX, pacmanPosZ);
 	glPopMatrix();
 
 	//Pacman

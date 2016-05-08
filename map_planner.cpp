@@ -165,8 +165,12 @@ MapPlanner::~MapPlanner() {
 
 void MapPlanner::generate(void) {
 	map = new int*[width];
-	for (int i = 0; i < width; ++i)
+	map_tiles = new int*[width];
+	for (int i = 0; i < width; ++i) {
 		map[i] = new int[height];
+		map_tiles[i] = new int[height];
+	}
+	srand(time(NULL));
 
 	//printf("map constructed [%d][%d]\n", width, height);
 
@@ -174,16 +178,21 @@ void MapPlanner::generate(void) {
 	for (j = 0; j<height; ++j) {
 		for (i = 0; i<width; ++i) {
 			map[i][j] = 1;
+			map_tiles[i][j] = rand() % 4+1;
 		}
 	}
 	posX = width / 2;
 	posY = height / 2;
 
 	setPoint(1, 1);
-	srand(time(NULL));
 	for (i = 0; i<(width*height)*HOLE_PERCENT; ++i) {
 		setPoint(rand() % (width / 2) + 1, rand() % (height / 2) + 1);
 	}
+	
+	for (i = 0; i<(width*height)*0.07f; ++i) {
+		map_tiles[rand() % width][rand() % height] = 5;
+	}
+
 
 	while (!BFS()) {}
 
@@ -192,6 +201,11 @@ void MapPlanner::generate(void) {
 
 int **MapPlanner::getArray(void) {
 	return map;
+}
+
+
+int **MapPlanner::getTilesArray(void) {
+	return map_tiles;
 }
 
 int MapPlanner::getWidth(void) {

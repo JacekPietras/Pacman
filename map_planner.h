@@ -18,6 +18,7 @@ public:
 	MapPlanner(int width, int height, int pathType);
 	~MapPlanner();
 	int **getArray(void);
+	int **getTilesArray(void);
 	int getWidth(void);
 	int getHeight(void);
 	void printSTD(void);
@@ -26,6 +27,7 @@ private:
 	int width;
 	int height;
 	int **map;
+	int **map_tiles;
 	int posX;
 	int posY;
 	int pathType;

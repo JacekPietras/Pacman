@@ -491,7 +491,7 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 
 	glPushMatrix();
 	setShadowMaterial();
-	drawShadow(pacmanPosX, pacmanPosZ, BLACK);
+	drawShadow(pacmanPosX*spacing, pacmanPosZ*spacing, BLACK);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -509,7 +509,7 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 
 	//Pacman
 	glPushMatrix();
-		glTranslatef(pacmanPosX, 0, pacmanPosZ);
+		glTranslatef(pacmanPosX*spacing, 0, pacmanPosZ*spacing);
 		glPushMatrix();
 		setPacmanMaterial();
 

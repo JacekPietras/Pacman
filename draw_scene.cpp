@@ -1,5 +1,6 @@
 #include "draw_scene.h"
 #include "tekstura.h"
+#include "model3DS.h"
 #include <math.h>
 
 #define M_PI 3.14159265358979323846
@@ -462,6 +463,51 @@ void drawWall(int i, int j) {
 	}
 }
 
+
+struct model_w_skladzie {
+	char * filename;
+	model3DS * model;
+	struct model_w_skladzie *wsk;
+};
+struct model_w_skladzie* sklad_modeli = NULL;
+
+void dodajModel(model3DS * _model, char* file_name)
+{
+	struct model_w_skladzie* tmp;
+	tmp = (struct model_w_skladzie *) malloc(sizeof(struct model_w_skladzie));
+	tmp->filename = (char *)malloc(strlen(file_name) + 1);
+	strcpy(tmp->filename, file_name);
+	tmp->model = _model;
+	tmp->wsk = sklad_modeli;
+	sklad_modeli = tmp;
+}
+
+model3DS * pobierzModel(char* file_name)
+{
+	struct model_w_skladzie* sklad_tmp = sklad_modeli;
+	while (sklad_tmp) {
+		if (!_stricmp(sklad_tmp->filename, file_name)) return sklad_tmp->model;
+		char file_name_full[_MAX_PATH];
+		strcpy(file_name_full, file_name);
+		strcat(file_name_full, ".3ds");
+		if (!_stricmp(sklad_tmp->filename, file_name_full)) return sklad_tmp->model;
+
+		sklad_tmp = sklad_tmp->wsk;
+	}
+	return NULL;
+}
+
+void rysujModel(char * file_name, int tex_num = -1)
+{
+	model3DS * model_tmp;
+	if (model_tmp = pobierzModel(file_name))
+		if (tex_num == -1)
+			model_tmp->draw();
+		else
+			model_tmp->draw(tex_num, false);
+
+}
+
 // Function fired every frame
 void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	GLUquadricObj *obiekt = gluNewQuadric();
@@ -485,7 +531,7 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 		}
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-
+	/*
 	// Labirynth
 	
 
@@ -525,7 +571,13 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 		gluSphere(obiekt, .8, 50, 50);
 		glPopMatrix();
 	glPopMatrix();
-
+	*/
+	glPushMatrix();
+	glTranslatef(0,20,0);
+	//glRotatef(-42,0,1,0);
+	rysujModel("ghost");
+	glPopMatrix();
+	/*
 	glPushMatrix();
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -555,5 +607,7 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	}
 	glDisable(GL_CULL_FACE);
 	glPopMatrix();
+
+	*/
 }
 

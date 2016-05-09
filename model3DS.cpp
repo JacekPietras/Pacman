@@ -7,6 +7,8 @@
 #include "model3DS.h"
 #include "glut.h"
 
+
+
 model3DS::model3DS(const char* filename,const float scale, bool stereo) : m_filename(filename), m_scale(scale), m_stereo(stereo){
     
     std::ifstream *modelFile = new std::ifstream(filename,std::ios::in | std::ios::binary | std::ios::ate);
@@ -712,6 +714,9 @@ void model3DS::setSpecialTransform(int number){  //
 		meshIter->setSpecialTransform(number);
 
 }
+
+
+
 
 
 

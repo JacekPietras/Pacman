@@ -115,7 +115,6 @@ public:
 	void setSpecularExponent(const float newExponent){m_specularExponent = newExponent;}
 	void setOpacity(const float newOpacity){m_opacity = newOpacity;}
 	void setTwoSided(const bool isTwoSided){m_twoSided = isTwoSided;}
-
 };
 
    ///////////////////////////////////////////////////////

@@ -39,6 +39,8 @@ int energy_id;
 int pacman_id;
 int shadow_id;
 
+int pointsRotation = 0;
+
 
 
 void setGreyMaterial() {
@@ -432,6 +434,8 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	GLUquadricObj *obiekt = gluNewQuadric();
 	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
 	gluQuadricDrawStyle(obiekt, GLU_FILL);
+	pointsRotation+=3;
+	if (pointsRotation >= 360) pointsRotation = 0;
 
 
 	// Shift for all map
@@ -480,6 +484,7 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 
 				glMatrixMode(GL_TEXTURE);
 				glMatrixMode(GL_MODELVIEW);
+				glRotatef(pointsRotation, 0, 1, 0);
 				glBindTexture(GL_TEXTURE_2D, energy_id);
 				gluQuadricDrawStyle(obiekt, GLU_FILL);
 				gluQuadricNormals(obiekt, GLU_SMOOTH);
@@ -509,6 +514,7 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 
 		glMatrixMode(GL_TEXTURE);
 		glMatrixMode(GL_MODELVIEW);
+		glRotatef(90, 0, 1, 0);
 		glBindTexture(GL_TEXTURE_2D, pacman_id);
 		gluQuadricDrawStyle(obiekt, GLU_FILL);
 		gluQuadricNormals(obiekt, GLU_SMOOTH);

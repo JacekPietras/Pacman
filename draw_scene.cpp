@@ -487,11 +487,11 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	glPushMatrix();
 		glMatrixMode(GL_TEXTURE);
 		glBindTexture(GL_TEXTURE_2D, ghost_id);
-		setGreyMaterial();
+		setPacmanMaterial();
 		glMatrixMode(GL_MODELVIEW);
 		glTranslatef(0,-1,0);
 		glScalef(.15f, .15f, .15f);
-		rysujModel("ghost");
+		rysujModel("ghost", ghost_id);
 	glPopMatrix();
 	/**/
 

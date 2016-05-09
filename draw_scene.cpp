@@ -120,7 +120,7 @@ void setShadowMaterial() {
 
 	glEnable(GL_BLEND);
 	//glDepthMask(GL_FALSE);
-	glBlendFunc(GL_ONE, GL_ONE);
+	glBlendFunc(GL_ZERO, GL_ZERO);
 	glDisable(GL_COLOR_MATERIAL);
 }
 
@@ -479,9 +479,34 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	glMatrixMode(GL_MODELVIEW);
 
 	// Labirynth
+	
+
+	glPushMatrix();
+	setShadowMaterial();
+	drawShadow(pacmanPosX, pacmanPosZ);
+	glPopMatrix();
+
+	//Pacman
+	glPushMatrix();
+		glTranslatef(pacmanPosX, 0, pacmanPosZ);
+		glPushMatrix();
+		setPacmanMaterial();
+
+		glMatrixMode(GL_TEXTURE);
+		glMatrixMode(GL_MODELVIEW);
+		glRotatef(90, 0, 1, 0);
+		glBindTexture(GL_TEXTURE_2D, pacman_id);
+		gluQuadricDrawStyle(obiekt, GLU_FILL);
+		gluQuadricNormals(obiekt, GLU_SMOOTH);
+		gluQuadricOrientation(obiekt, GLU_OUTSIDE);
+		gluQuadricTexture(obiekt, GL_TRUE);
+
+		gluSphere(obiekt, .8, 50, 50);
+		glPopMatrix();
+	glPopMatrix();
+
 	glPushMatrix();
 	glTranslatef(-(mapWidth / 2) * spacing, 0, - (mapHeight / 2) * spacing);
-	
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
 			if (map[i][j] == 3) {
@@ -506,31 +531,5 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 		glTranslatef(-mapWidth* spacing, 0, spacing);
 	}
 	glPopMatrix();
-
-	glPushMatrix();
-	drawShadow(pacmanPosX, pacmanPosZ);
-	glPopMatrix();
-
-	//Pacman
-	glPushMatrix();
-		glTranslatef(pacmanPosX, 0, pacmanPosZ);
-
-		glPushMatrix();
-		setPacmanMaterial();
-
-		glMatrixMode(GL_TEXTURE);
-		glMatrixMode(GL_MODELVIEW);
-		glRotatef(90, 0, 1, 0);
-		glBindTexture(GL_TEXTURE_2D, pacman_id);
-		gluQuadricDrawStyle(obiekt, GLU_FILL);
-		gluQuadricNormals(obiekt, GLU_SMOOTH);
-		gluQuadricOrientation(obiekt, GLU_OUTSIDE);
-		gluQuadricTexture(obiekt, GL_TRUE);
-
-		gluSphere(obiekt, .8, 50, 50);
-		glPopMatrix();
-
-	glPopMatrix();
-
 }
 

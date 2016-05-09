@@ -43,6 +43,9 @@ int pacman_id;
 int shadow_id;
 int shadow_ball_id;
 
+
+int ghost_id;
+
 double pointsRotation = 0;
 
 void setGreyMaterial() {
@@ -168,6 +171,7 @@ void drawInit() {
 	pacman_id = WczytajTeksture("pacman.bmp");
 	shadow_id = WczytajTekstureAlpha("shadow.bmp");
 	shadow_ball_id = WczytajTekstureAlpha("shadow_ball.bmp");
+	ghost_id = WczytajTekstureAlpha("ghost.bmp");
 }
 
 void drawShadow(double x, double y, int color) {
@@ -479,7 +483,17 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	// Shift for all map
 	glTranslatef(0, 0, -30);
 
-
+	
+	glPushMatrix();
+		glMatrixMode(GL_TEXTURE);
+		glBindTexture(GL_TEXTURE_2D, ghost_id);
+		setGreyMaterial();
+		glMatrixMode(GL_MODELVIEW);
+		glTranslatef(0,-1,0);
+		glScalef(.15f, .15f, .15f);
+		rysujModel("ghost");
+	glPopMatrix();
+	/**/
 
 	glPushMatrix();
 		setGreyMaterial();
@@ -513,6 +527,7 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	glPopMatrix();
 
 	//Pacman
+	
 	glPushMatrix();
 		glTranslatef(pacmanPosX*spacing, 0, pacmanPosZ*spacing);
 		glPushMatrix();
@@ -527,15 +542,11 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 		gluQuadricOrientation(obiekt, GLU_OUTSIDE);
 		gluQuadricTexture(obiekt, GL_TRUE);
 
-		gluSphere(obiekt, .8, 50, 50);
+		//gluSphere(obiekt, .8, 50, 50);
 		glPopMatrix();
 	glPopMatrix();
 	
-	glPushMatrix();
-	glTranslatef(0,5,0);
-	//glRotatef(-42,0,1,0);
-	rysujModel("ghost");
-	glPopMatrix();
+	
 	
 	glPushMatrix();
 	glEnable(GL_CULL_FACE);

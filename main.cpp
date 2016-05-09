@@ -34,6 +34,10 @@ void windowInit() {
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_LIGHTING);
+	//glEnable(GL_POLYGON_SMOOTH);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	GLfloat  ambient[4] = { 0.3,0.3,0.3,1 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 

@@ -41,8 +41,6 @@ int shadow_id;
 
 int pointsRotation = 0;
 
-
-
 void setGreyMaterial() {
 	glDisable(GL_BLEND);
 	GLfloat  matSpecular[4] = { 0,0,0,1 };
@@ -74,6 +72,7 @@ void setPacmanMaterial() {
 }
 
 void setShinyMaterial() {
+	glDisable(GL_BLEND);
 	GLfloat  matSpecular[4] = { 1,1,1,1 };
 	GLfloat  matAmbient[4] = { 1,1,1,1 };
 	GLfloat  matDiffuse[4] = { 1,1,1,1 };
@@ -97,6 +96,32 @@ void setShinyMaterial() {
 	//glDepthMask(GL_FALSE);
 	//glBlendFunc(GL_ONE, GL_ONE);
 	//glDisable(GL_COLOR_MATERIAL);
+}
+
+void setShadowMaterial() {
+	GLfloat  matSpecular[4] = { 0,0,0,1 };
+	GLfloat  matAmbient[4] = { 0.5,0.5,0.5,1 };
+	GLfloat  matDiffuse[4] = { 1,1,1,1 };
+	GLfloat  matEmission[4] = { 0,0,0,1 };
+	GLfloat  matShininess = 10;
+
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);  // w³¹czenie trybu koloryzacji materia³ów
+	glEnable(GL_COLOR_MATERIAL); // teraz zmiana koloru materia³u nastêpuje poprzez zwykly glColor*()
+
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmission);
+	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
+
+	// pierwszy parametr:GL_ZERO, GL_ONE, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE.
+	// drugi parametr:GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA
+
+	glEnable(GL_BLEND);
+	//glDepthMask(GL_FALSE);
+	glBlendFunc(GL_ONE, GL_ONE);
+	glDisable(GL_COLOR_MATERIAL);
 }
 
 
@@ -442,39 +467,20 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	glTranslatef(0, 0, -30);
 
 
-	/*
+
 	glPushMatrix();
-
-
-	GLint list[50];
-	setShinyMaterial();
-
-	glNewList(list[0], GL_COMPILE);
-
-	gluQuadricDrawStyle(obiekt, GLU_FILL);
-	gluQuadricNormals(obiekt, GLU_SMOOTH);
-	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
-	gluQuadricTexture(obiekt, GL_TRUE);
-
-	glMatrixMode(GL_TEXTURE);
-	glBindTexture(GL_TEXTURE_2D, energy_id);
-
-
-	glEndList();
-
-
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-
-
-
+		setGreyMaterial();
+		for (int j = 0; j<mapHeight; ++j) {
+			for (int i = 0; i<mapWidth; ++i) {
+				drawWall(i, j);
+			}
+		}
 	glPopMatrix();
-	*/
-
+	glMatrixMode(GL_MODELVIEW);
 
 	// Labirynth
 	glPushMatrix();
-	glTranslatef(-mapWidth / 2 * spacing, 0, - mapHeight / 2 * spacing);
+	glTranslatef(-(mapWidth / 2) * spacing, 0, - (mapHeight / 2) * spacing);
 	
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
@@ -526,11 +532,5 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 
 	glPopMatrix();
 
-	setGreyMaterial();
-	for (int j = 0; j<mapHeight; ++j) {
-		for (int i = 0; i<mapWidth; ++i) {
-			drawWall(i, j);
-		}
-	}
 }
 

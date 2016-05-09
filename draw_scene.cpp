@@ -9,6 +9,8 @@ MapPlanner planner(mapWidth, mapHeight);
 int **map;
 int **map_tiles;
 double spacing = 2.0;
+#define BLACK 0
+#define BLUE 1
 
 int roof_id0;
 int roof_id1;
@@ -38,8 +40,9 @@ int side_3_id;
 int energy_id;
 int pacman_id;
 int shadow_id;
+int shadow_ball_id;
 
-int pointsRotation = 0;
+double pointsRotation = 0;
 
 void setGreyMaterial() {
 	glDisable(GL_BLEND);
@@ -77,25 +80,26 @@ void setShinyMaterial() {
 	GLfloat  matAmbient[4] = { 1,1,1,1 };
 	GLfloat  matDiffuse[4] = { 1,1,1,1 };
 	GLfloat  matEmission[4] = { 1,1,1,1 };
-	GLfloat  matShininess = 50;
+	GLfloat  matShininess = 0;
 
-	//glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);  // w³¹czenie trybu koloryzacji materia³ów
-	//glEnable(GL_COLOR_MATERIAL); // teraz zmiana koloru materia³u nastêpuje poprzez zwykly glColor*()
+	glPolygonMode(GL_BACK, GL_FILL);
+	glColorMaterial(GL_FRONT, GL_DIFFUSE);  // w³¹czenie trybu koloryzacji materia³ów
+	glEnable(GL_COLOR_MATERIAL); // teraz zmiana koloru materia³u nastêpuje poprzez zwykly glColor*()
 
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmission);
-	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
+	glMaterialfv(GL_BACK, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_BACK, GL_AMBIENT, matAmbient);
+	glMaterialfv(GL_BACK, GL_DIFFUSE, matDiffuse);
+	glMaterialfv(GL_BACK, GL_EMISSION, matEmission);
+	glMateriali(GL_BACK, GL_SHININESS, matShininess);
 
 	// pierwszy parametr:GL_ZERO, GL_ONE, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE.
 	// drugi parametr:GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA
 
-	//glEnable(GL_BLEND);
+	glEnable(GL_BLEND);
 	//glDepthMask(GL_FALSE);
-	//glBlendFunc(GL_ONE, GL_ONE);
-	//glDisable(GL_COLOR_MATERIAL);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glDisable(GL_COLOR_MATERIAL);
 }
 
 void setShadowMaterial() {
@@ -120,7 +124,7 @@ void setShadowMaterial() {
 
 	glEnable(GL_BLEND);
 	//glDepthMask(GL_FALSE);
-	glBlendFunc(GL_ZERO, GL_ZERO);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_COLOR_MATERIAL);
 }
 
@@ -159,12 +163,13 @@ void drawInit() {
 	side_2_id = WczytajTeksture("side_2.bmp");
 	side_3_id = WczytajTeksture("side_3.bmp");
 
-	energy_id = WczytajTeksture("energy.bmp");
+	energy_id = WczytajTekstureAlpha("energy.bmp");
 	pacman_id = WczytajTeksture("pacman.bmp");
-	shadow_id = WczytajTeksture("shadow.bmp");
+	shadow_id = WczytajTekstureAlpha("shadow.bmp");
+	shadow_ball_id = WczytajTekstureAlpha("shadow_ball.bmp");
 }
 
-void drawShadow(double x, double y) {
+void drawShadow(double x, double y, int color) {
 	glPushMatrix();
 	double s = spacing;
 	double z = -spacing / 2+0.05;
@@ -177,7 +182,10 @@ void drawShadow(double x, double y) {
 	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
 	glRotatef(90, 1, 0, 0);
 	glTranslatef(spacing / 2, spacing / 2, spacing / 2);
-	glBindTexture(GL_TEXTURE_2D, shadow_id);
+	if(color == BLUE)
+		glBindTexture(GL_TEXTURE_2D, shadow_ball_id);
+	else
+		glBindTexture(GL_TEXTURE_2D, shadow_id);
 
 
 	glBegin(GL_QUADS);
@@ -483,7 +491,20 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 
 	glPushMatrix();
 	setShadowMaterial();
-	drawShadow(pacmanPosX, pacmanPosZ);
+	drawShadow(pacmanPosX, pacmanPosZ, BLACK);
+	glPopMatrix();
+
+	glPushMatrix();
+	for (int j = 0; j<mapHeight; ++j) {
+		for (int i = 0; i<mapWidth; ++i) {
+			if (map[i][j] == 3) {
+				glPushMatrix();
+				setShinyMaterial();
+				drawShadow((i-mapWidth/2)*spacing, (j-mapHeight/2)*spacing, BLUE);
+				glPopMatrix();
+			}
+		}
+	}
 	glPopMatrix();
 
 	//Pacman
@@ -506,13 +527,15 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-(mapWidth / 2) * spacing, 0, - (mapHeight / 2) * spacing);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+	glTranslatef(-(mapWidth / 2) * spacing, -spacing/4, - (mapHeight / 2) * spacing);
 	for (int j = 0; j<mapHeight; ++j) {
 		for (int i = 0; i<mapWidth; ++i) {
 			if (map[i][j] == 3) {
 				glPushMatrix();
 				setShinyMaterial();
-
 				glMatrixMode(GL_TEXTURE);
 				glMatrixMode(GL_MODELVIEW);
 				glRotatef(pointsRotation, 0, 1, 0);
@@ -530,6 +553,7 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 		}
 		glTranslatef(-mapWidth* spacing, 0, spacing);
 	}
+	glDisable(GL_CULL_FACE);
 	glPopMatrix();
 }
 

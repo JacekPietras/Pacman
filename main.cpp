@@ -31,6 +31,9 @@ void setCamera() {
 void windowInit() {
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_CULL_FACE); 
+	//glCullFace(GL_BACK);
+	//glFrontFace(GL_CCW);
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_LIGHTING);
@@ -38,11 +41,21 @@ void windowInit() {
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-	GLfloat  ambient[4] = { 0.3,0.3,0.3,1 };
+	
+	
+	//GLfloat  ambient[4] = { 0.3,0.3,0.3,1 };
+	//glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
+
+	//GLfloat  diffuse[4] = { 0.9,0.9,0.9,1 };
+	//GLfloat  specular[4] = { 0.9,0.9,0.9,1 };
+	//GLfloat	 position[4] = { 30,30,30,1 };
+
+
+	GLfloat  ambient[4] = { 0.5,0.5,0.5,0 };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 
-	GLfloat  diffuse[4] = { 0.9,0.9,0.9,1 };
-	GLfloat  specular[4] = { 0.9,0.9,0.9,1 };
+	GLfloat  diffuse[4] = { 0.5,0.5,0.5,0 };
+	GLfloat  specular[4] = { 0.5,0.5,0.5,0 };
 	GLfloat	 position[4] = { 30,30,30,1 };
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);

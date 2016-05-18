@@ -7,7 +7,7 @@
 #include "glut.h"
 #include "tekstura.h"
 
-int num_texture=-1; 
+int num_texture=100; 
 
 int WczytajTeksture (char *filename) 
 {

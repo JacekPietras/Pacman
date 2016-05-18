@@ -39,12 +39,8 @@ int side_2_id;
 int side_3_id;
 
 int energy_id;
-int pacman_id;
 int shadow_id;
 int shadow_ball_id;
-
-
-int ghost_id;
 
 double pointsRotation = 0;
 
@@ -168,10 +164,8 @@ void drawInit() {
 	side_3_id = WczytajTeksture("side_3.bmp");
 
 	energy_id = WczytajTekstureAlpha("energy.bmp");
-	pacman_id = WczytajTeksture("pacman.bmp");
 	shadow_id = WczytajTekstureAlpha("shadow.bmp");
 	shadow_ball_id = WczytajTekstureAlpha("shadow_ball.bmp");
-	ghost_id = WczytajTekstureAlpha("ghost.bmp");
 }
 
 void drawShadow(double x, double y, int color) {
@@ -211,6 +205,7 @@ void drawShadow(double x, double y, int color) {
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 
 
 }
@@ -469,10 +464,30 @@ void drawWall(int i, int j) {
 
 void rysujModel(char * file_name, int tex_num = -1);
 
+void ghost(float x, float z) {
+	setPacmanMaterial();
+	glTranslatef(x*spacing, -1, z*spacing);
+	glScalef(.15f, .15f, .15f);
+	rysujModel("ghost");
+}
+
+void pacman(float x, float z) {
+	setPacmanMaterial();
+	glTranslatef(x*spacing, -1, z*spacing);
+	glScalef(.2f, .2f, .2f);
+	rysujModel("pacman");
+	rysujModel("pacman2");
+}
+
+void draw(void(*shape)(float, float), float x, float z) {
+	glPushMatrix();
+	shape(x,z);
+	glPopMatrix();
+}
 
 
 // Function fired every frame
-void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
+void drawScene(float pacmanPosX, float pacmanPosZ) {
 	GLUquadricObj *obiekt = gluNewQuadric();
 	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
 	gluQuadricDrawStyle(obiekt, GLU_FILL);
@@ -482,18 +497,9 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 
 	// Shift for all map
 	glTranslatef(0, 0, -30);
-
 	
-	glPushMatrix();
-		glMatrixMode(GL_TEXTURE);
-		glBindTexture(GL_TEXTURE_2D, ghost_id);
-		setPacmanMaterial();
-		glMatrixMode(GL_MODELVIEW);
-		glTranslatef(0,-1,0);
-		glScalef(.15f, .15f, .15f);
-		rysujModel("ghost", ghost_id);
-	glPopMatrix();
-	/**/
+	draw(ghost, 1, 0);
+	draw(pacman, pacmanPosX, pacmanPosZ);
 
 	glPushMatrix();
 		setGreyMaterial();
@@ -525,59 +531,37 @@ void drawScene(GLfloat pacmanPosX, GLfloat pacmanPosZ) {
 		}
 	}
 	glPopMatrix();
-
-	//Pacman
+	
+	glMatrixMode(GL_MODELVIEW);
 	
 	glPushMatrix();
-		glTranslatef(pacmanPosX*spacing, 0, pacmanPosZ*spacing);
-		glPushMatrix();
-		setPacmanMaterial();
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
+		glTranslatef(-(mapWidth / 2) * spacing, -spacing/4, - (mapHeight / 2) * spacing);
+		for (int j = 0; j<mapHeight; ++j) {
+			for (int i = 0; i<mapWidth; ++i) {
+				if (map[i][j] == 3) {
+					glPushMatrix();
+					setShinyMaterial();
+					glMatrixMode(GL_TEXTURE);
+					glMatrixMode(GL_MODELVIEW);
+					glRotatef(pointsRotation, 0, 1, 0);
+					glBindTexture(GL_TEXTURE_2D, energy_id);
+					gluQuadricDrawStyle(obiekt, GLU_FILL);
+					gluQuadricNormals(obiekt, GLU_SMOOTH);
+					gluQuadricOrientation(obiekt, GLU_OUTSIDE);
+					gluQuadricTexture(obiekt, GL_TRUE);
 
-		glMatrixMode(GL_TEXTURE);
-		glMatrixMode(GL_MODELVIEW);
-		glRotatef(90, 0, 1, 0);
-		glBindTexture(GL_TEXTURE_2D, pacman_id);
-		gluQuadricDrawStyle(obiekt, GLU_FILL);
-		gluQuadricNormals(obiekt, GLU_SMOOTH);
-		gluQuadricOrientation(obiekt, GLU_OUTSIDE);
-		gluQuadricTexture(obiekt, GL_TRUE);
+					gluSphere(obiekt, .3f, 50, 50);
+					glPopMatrix();
+				}
 
-		//gluSphere(obiekt, .8, 50, 50);
-		glPopMatrix();
-	glPopMatrix();
-	
-	
-	
-	glPushMatrix();
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-	glTranslatef(-(mapWidth / 2) * spacing, -spacing/4, - (mapHeight / 2) * spacing);
-	for (int j = 0; j<mapHeight; ++j) {
-		for (int i = 0; i<mapWidth; ++i) {
-			if (map[i][j] == 3) {
-				glPushMatrix();
-				setShinyMaterial();
-				glMatrixMode(GL_TEXTURE);
-				glMatrixMode(GL_MODELVIEW);
-				glRotatef(pointsRotation, 0, 1, 0);
-				glBindTexture(GL_TEXTURE_2D, energy_id);
-				gluQuadricDrawStyle(obiekt, GLU_FILL);
-				gluQuadricNormals(obiekt, GLU_SMOOTH);
-				gluQuadricOrientation(obiekt, GLU_OUTSIDE);
-				gluQuadricTexture(obiekt, GL_TRUE);
-
-				gluSphere(obiekt, .3f, 50, 50);
-				glPopMatrix();
+				glTranslatef(spacing, 0, 0);
 			}
-
-			glTranslatef(spacing, 0, 0);
+			glTranslatef(-mapWidth* spacing, 0, spacing);
 		}
-		glTranslatef(-mapWidth* spacing, 0, spacing);
-	}
-	glDisable(GL_CULL_FACE);
+		glDisable(GL_CULL_FACE);
 	glPopMatrix();
-
-	
 }
 

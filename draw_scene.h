@@ -8,6 +8,6 @@
 #include <stdlib.h> 
 
 void drawInit();
-void drawScene(GLfloat, GLfloat);
+void drawScene(float, float);
 
 #endif

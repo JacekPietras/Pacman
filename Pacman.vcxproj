@@ -137,14 +137,18 @@
     <ClCompile Include="draw_scene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model3DS.cpp" />
+    <ClCompile Include="models.cpp" />
     <ClCompile Include="tekstura.cpp" />
     <ClCompile Include="textureBMP.cpp" />
     <ClCompile Include="textureTGA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="draw_scene.h" />
+    <ClInclude Include="interakcja.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="map_planner.h" />
     <ClInclude Include="model3DS.h" />
+    <ClInclude Include="models.h" />
     <ClInclude Include="tekstura.h" />
     <ClInclude Include="textureBMP.h" />
     <ClInclude Include="textureTGA.h" />

@@ -6,8 +6,9 @@
 #include "map_planner.h"
 #include <stdio.h>
 #include <stdlib.h> 
+#include "main.h"
 
 void drawInit();
-void drawScene(float, float);
+void drawScene(GameState &gs);
 
 #endif

@@ -1,11 +1,5 @@
-/*
+#include "interakcja.h"
 
- C++ przez OpenGL - szablon do æwiczeñ laboratoryjnych
- (C) Micha³ Turek.
-
-*/
-
-#ifdef _INTERAKCJA
 // Kamera
 int pozycjaMyszyX;						// na ekranie
 int pozycjaMyszyY;
@@ -18,13 +12,10 @@ double kameraPredkosc;
 bool kameraPrzemieszczanie;		// przemieszczanie lub rozgl¹danie
 double kameraKat;				// kat patrzenia
 double kameraPredkoscObrotu;
-#define MIN_DYSTANS 0.5			// minimalny dystans od brzegu obszaru ograniczenia kamery
 double obszarKamery = 0;
 
 enum Direction { Forward, Right, Back, Left };
 bool movementKeysState[4];
-
-
 
 void SzablonPrzyciskMyszyWcisniety(int button, int state, int x, int y)
 {
@@ -144,23 +135,31 @@ void onKeyUp(GLubyte key, int x, int y) {
 }
 
 //Called each frame
-void handleMovement(GLfloat &pacmanPosX, GLfloat &pacmanPosZ) {
-	if (movementKeysState[Forward])
-	{
-		pacmanPosZ += 1.0f;
+void move(bool key, GameState &gs, float dx, float dz) {
+	const float speed = 0.1;
+	if (key) {
+		float x = gs.pacmanPosX + dx * speed;
+		float z = gs.pacmanPosZ + dz * speed;
+
+		float s = spacing / 2;
+		int xOnMap = (int)(round(x + (1 - speed) / 2 * dx) + (mapWidth / 2));
+		int zOnMap = (int)(round(z + (1 - speed) / 2 * dz) + (mapHeight / 2));
+		cout << "xOnMap = " << xOnMap << " zOnMap = " << zOnMap << " x = " << x << " z = " << z;
+
+
+		int nextTile = gs.map[xOnMap][zOnMap];
+		cout << " nextTile = " << nextTile << endl;
+		if (nextTile == 2 || nextTile == 3) {
+			gs.pacmanPosX = x;
+			gs.pacmanPosZ = z;
+		}
 	}
-	else if (movementKeysState[Back])
-	{
-		pacmanPosZ -= 1.0f;
-	}
-	if (movementKeysState[Right])
-	{
-		pacmanPosX += 1.0f;
-	}
-	else if (movementKeysState[Left])
-	{
-		pacmanPosX -= 1.0f;
-	}
+}
+void handleMovement(GameState &gs) {
+	move(movementKeysState[Forward], gs, 1, 0);
+	move(movementKeysState[Back], gs, -1, 0);
+	move(movementKeysState[Right], gs, 0, 1);
+	move(movementKeysState[Left], gs, 0, -1);
 }
 
 void KlawiszSpecjalnyWcisniety(GLint key, int x, int y)
@@ -184,13 +183,4 @@ void KlawiszSpecjalnyWcisniety(GLint key, int x, int y)
 		break;
 
 	}
-
-
-
 }
-
-
-/******************************************************/
-
-#undef _INTERAKCJA
-#endif

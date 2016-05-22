@@ -1,17 +1,15 @@
 #include "draw_scene.h"
 #include "tekstura.h"
+#include "models.h"
 #include "model3DS.h"
 #include <math.h>
 
 #define M_PI 3.14159265358979323846
-int mapWidth = 20;
-int mapHeight = 20;
-MapPlanner planner(mapWidth, mapHeight);
-int **map;
-int **map_tiles;
-double spacing = 2.0;
 #define BLACK 0
 #define BLUE 1
+float pacmanPosX, pacmanPosZ;
+int **map;
+int **map_tiles;
 
 int roof_id0;
 int roof_id1;
@@ -131,12 +129,6 @@ void setShadowMaterial() {
 
 // Function fired on start
 void drawInit() {
-	planner.printSTD();
-	map = planner.getArray();
-	map_tiles = planner.getTilesArray();
-	mapWidth = planner.getWidth();
-	mapHeight = planner.getHeight();
-
 	floor_id0_1 = WczytajTeksture("floor0.bmp");
 	floor_id0_2 = WczytajTeksture("floor0_2.bmp");
 	floor_id0_3 = WczytajTeksture("floor0_3.bmp");
@@ -169,23 +161,25 @@ void drawInit() {
 }
 
 void drawShadow(double x, double y, int color) {
-	glPushMatrix();
 	double s = spacing;
 	double z = -spacing / 2+0.05;
+
+	x *= spacing;
+	y *= spacing;
 
 	x -= spacing / 2;
 	y -= spacing / 2;
 
-
 	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
 	glScalef(1 / spacing, 1 / spacing, 1 / spacing);
 	glRotatef(90, 1, 0, 0);
-	glTranslatef(spacing / 2, spacing / 2, spacing / 2);
+	glTranslatef(-x, 0, -y);
+
 	if(color == BLUE)
 		glBindTexture(GL_TEXTURE_2D, shadow_ball_id);
 	else
 		glBindTexture(GL_TEXTURE_2D, shadow_id);
-
 
 	glBegin(GL_QUADS);
 	glNormal3f(0.0f, 1.0f, 0.0f);
@@ -202,12 +196,8 @@ void drawShadow(double x, double y, int color) {
 	glVertex3f(x, z, y + s);
 	glEnd();
 
-	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
-	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-
-
 }
 
 void drawCluster(double x, double y, double z, int how, int rot, int textureType) {
@@ -462,8 +452,6 @@ void drawWall(int i, int j) {
 	}
 }
 
-void rysujModel(char * file_name, int tex_num = -1);
-
 void ghost(float x, float z) {
 	setPacmanMaterial();
 	glTranslatef(x*spacing, -1, z*spacing);
@@ -474,7 +462,7 @@ void ghost(float x, float z) {
 void pacman(float x, float z) {
 	setPacmanMaterial();
 	glTranslatef(x*spacing, -1, z*spacing);
-	glScalef(.2f, .2f, .2f);
+	glScalef(.2f, .2f, .15f);
 	rysujModel("pacman");
 	rysujModel("pacman2");
 }
@@ -487,7 +475,12 @@ void draw(void(*shape)(float, float), float x, float z) {
 
 
 // Function fired every frame
-void drawScene(float pacmanPosX, float pacmanPosZ) {
+void drawScene(GameState &gs) {
+	pacmanPosX = gs.pacmanPosX;
+	pacmanPosZ = gs.pacmanPosZ;
+	map = gs.map;
+	map_tiles = gs.map_tiles;
+
 	GLUquadricObj *obiekt = gluNewQuadric();
 	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
 	gluQuadricDrawStyle(obiekt, GLU_FILL);
@@ -508,15 +501,15 @@ void drawScene(float pacmanPosX, float pacmanPosZ) {
 				drawWall(i, j);
 			}
 		}
-	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 	// Labirynth
 	
 	
 
 	glPushMatrix();
 	setShadowMaterial();
-	drawShadow(pacmanPosX*spacing, pacmanPosZ*spacing, BLACK);
+	drawShadow(pacmanPosX, pacmanPosZ, BLACK);
 	glPopMatrix();
 
 	glPushMatrix();
@@ -525,7 +518,7 @@ void drawScene(float pacmanPosX, float pacmanPosZ) {
 			if (map[i][j] == 3) {
 				glPushMatrix();
 				setShinyMaterial();
-				drawShadow((i-mapWidth/2)*spacing, (j-mapHeight/2)*spacing, BLUE);
+				drawShadow((i-mapWidth/2), (j-mapHeight/2), BLUE);
 				glPopMatrix();
 			}
 		}

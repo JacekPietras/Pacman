@@ -19,7 +19,7 @@ GameState gameState;
 MapPlanner planner(mapHeight, mapWidth);
 
 void setCamera() {
-	kameraX = 0;
+	kameraX = -15;
 	kameraY = 15;
 	kameraZ = 0;
 	kameraKat = 0;
@@ -94,7 +94,7 @@ void drawFrame()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Kasowanie ekranu
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(kameraX, kameraY, kameraZ, kameraX + 100 * sin(kameraKat), 3 + kameraPunktY, kameraZ - 100 * cos(kameraKat), 0, 1, 0); // kamera
+	gluLookAt(gameState.pacmanPosX * spacing + kameraX, kameraY, gameState.pacmanPosZ * spacing + kameraZ,gameState.pacmanPosX * spacing, -1, gameState.pacmanPosZ * spacing, 0, 1, 0); // kamera
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
 	glPushMatrix();
 

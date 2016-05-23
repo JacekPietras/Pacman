@@ -136,8 +136,10 @@
     <ClCompile Include="map_planner.cpp" />
     <ClCompile Include="draw_scene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="materials.cpp" />
     <ClCompile Include="model3DS.cpp" />
     <ClCompile Include="models.cpp" />
+    <ClCompile Include="shapes.cpp" />
     <ClCompile Include="tekstura.cpp" />
     <ClCompile Include="textureBMP.cpp" />
     <ClCompile Include="textureTGA.cpp" />
@@ -147,8 +149,10 @@
     <ClInclude Include="interakcja.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="map_planner.h" />
+    <ClInclude Include="materials.h" />
     <ClInclude Include="model3DS.h" />
     <ClInclude Include="models.h" />
+    <ClInclude Include="shapes.h" />
     <ClInclude Include="tekstura.h" />
     <ClInclude Include="textureBMP.h" />
     <ClInclude Include="textureTGA.h" />

@@ -1,8 +1,4 @@
 #include "draw_scene.h"
-#include "tekstura.h"
-#include "models.h"
-#include "model3DS.h"
-#include <math.h>
 
 #define M_PI 3.14159265358979323846
 #define BLACK 0
@@ -41,91 +37,6 @@ int shadow_id;
 int shadow_ball_id;
 
 double pointsRotation = 0;
-
-void setGreyMaterial() {
-	glDisable(GL_BLEND);
-	GLfloat  matSpecular[4] = { 0,0,0,1 };
-	GLfloat  matAmbient[4] = { 0.5,0.5,0.5,1 };
-	GLfloat  matDiffuse[4] = { 1,1,1,1 };
-	GLfloat  matEmission[4] = { 0,0,0,1 };
-	GLfloat  matShininess = 10;
-
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmission);
-	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
-}
-
-void setPacmanMaterial() {
-	glDisable(GL_BLEND);
-	GLfloat  matSpecular[4] = { 1,1,1,1 };
-	GLfloat  matAmbient[4] = { 0.2,0.2,0.2,1 };
-	GLfloat  matDiffuse[4] = { .9,.9,.9,1 };
-	GLfloat  matEmission[4] = { 0,0,0,1 };
-	GLfloat  matShininess = 50;
-
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmission);
-	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
-}
-
-void setShinyMaterial() {
-	glDisable(GL_BLEND);
-	GLfloat  matSpecular[4] = { 1,1,1,1 };
-	GLfloat  matAmbient[4] = { 1,1,1,1 };
-	GLfloat  matDiffuse[4] = { 1,1,1,1 };
-	GLfloat  matEmission[4] = { 1,1,1,1 };
-	GLfloat  matShininess = 0;
-
-	glPolygonMode(GL_BACK, GL_FILL);
-	glColorMaterial(GL_FRONT, GL_DIFFUSE);  // w³¹czenie trybu koloryzacji materia³ów
-	glEnable(GL_COLOR_MATERIAL); // teraz zmiana koloru materia³u nastêpuje poprzez zwykly glColor*()
-
-
-	glMaterialfv(GL_BACK, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_BACK, GL_AMBIENT, matAmbient);
-	glMaterialfv(GL_BACK, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_BACK, GL_EMISSION, matEmission);
-	glMateriali(GL_BACK, GL_SHININESS, matShininess);
-
-	// pierwszy parametr:GL_ZERO, GL_ONE, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE.
-	// drugi parametr:GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA
-
-	glEnable(GL_BLEND);
-	//glDepthMask(GL_FALSE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	glDisable(GL_COLOR_MATERIAL);
-}
-
-void setShadowMaterial() {
-	GLfloat  matSpecular[4] = { 0,0,0,1 };
-	GLfloat  matAmbient[4] = { 0.5,0.5,0.5,1 };
-	GLfloat  matDiffuse[4] = { 1,1,1,1 };
-	GLfloat  matEmission[4] = { 0,0,0,1 };
-	GLfloat  matShininess = 10;
-
-	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);  // w³¹czenie trybu koloryzacji materia³ów
-	glEnable(GL_COLOR_MATERIAL); // teraz zmiana koloru materia³u nastêpuje poprzez zwykly glColor*()
-
-
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmission);
-	glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
-
-	// pierwszy parametr:GL_ZERO, GL_ONE, GL_DST_COLOR, GL_ONE_MINUS_DST_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA, GL_SRC_ALPHA_SATURATE.
-	// drugi parametr:GL_ZERO, GL_ONE, GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_DST_ALPHA, GL_ONE_MINUS_DST_ALPHA
-
-	glEnable(GL_BLEND);
-	//glDepthMask(GL_FALSE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable(GL_COLOR_MATERIAL);
-}
-
 
 // Function fired on start
 void drawInit() {
@@ -452,24 +363,15 @@ void drawWall(int i, int j) {
 	}
 }
 
-void ghost(float x, float z) {
-	setPacmanMaterial();
-	glTranslatef(x*spacing, -1, z*spacing);
-	glScalef(.15f, .15f, .15f);
-	rysujModel("ghost");
-}
-
-void pacman(float x, float z) {
-	setPacmanMaterial();
-	glTranslatef(x*spacing, -1, z*spacing);
-	glScalef(.2f, .2f, .15f);
-	rysujModel("pacman");
-	rysujModel("pacman2");
-}
 
 void draw(void(*shape)(float, float), float x, float z) {
 	glPushMatrix();
 	shape(x,z);
+	glPopMatrix();
+}
+void draw(void(*shape)(float, float, GameState & gs), float x, float z, GameState & gs) {
+	glPushMatrix();
+	shape(x, z, gs);
 	glPopMatrix();
 }
 
@@ -486,13 +388,9 @@ void drawScene(GameState &gs) {
 	gluQuadricDrawStyle(obiekt, GLU_FILL);
 	pointsRotation+=3;
 	if (pointsRotation >= 360) pointsRotation = 0;
-
-
-	// Shift for all map
-	glTranslatef(0, 0, -30);
 	
 	draw(ghost, 1, 0);
-	draw(pacman, pacmanPosX, pacmanPosZ);
+	draw(pacman, pacmanPosX, pacmanPosZ, gs);
 
 	glPushMatrix();
 		setGreyMaterial();
@@ -556,5 +454,7 @@ void drawScene(GameState &gs) {
 		}
 		glDisable(GL_CULL_FACE);
 	glPopMatrix();
+
+	draw(hud, oknoSzerkosc - 300, 10, gs);
 }
 

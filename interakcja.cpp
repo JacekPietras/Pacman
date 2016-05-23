@@ -135,8 +135,8 @@ void onKeyUp(GLubyte key, int x, int y) {
 }
 
 //Called each frame
-void move(bool key, GameState &gs, float dx, float dz) {
-	const float speed = 0.1;
+void move(bool key, GameState &gs, float dx, float dz, int rotation) {
+	const float speed = 0.5;
 	if (key) {
 		float x = gs.pacmanPosX + dx * speed;
 		float z = gs.pacmanPosZ + dz * speed;
@@ -146,20 +146,25 @@ void move(bool key, GameState &gs, float dx, float dz) {
 		int zOnMap = (int)(round(z + (1 - speed) / 2 * dz) + (mapHeight / 2));
 		cout << "xOnMap = " << xOnMap << " zOnMap = " << zOnMap << " x = " << x << " z = " << z;
 
-
 		int nextTile = gs.map[xOnMap][zOnMap];
+
 		cout << " nextTile = " << nextTile << endl;
 		if (nextTile == 2 || nextTile == 3) {
 			gs.pacmanPosX = x;
 			gs.pacmanPosZ = z;
+			gs.pacmanAngle = rotation;
+			if (nextTile == 3) {
+				gs.map[xOnMap][zOnMap] = 2;
+				gs.points++;
+			}
 		}
 	}
 }
 void handleMovement(GameState &gs) {
-	move(movementKeysState[Forward], gs, 1, 0);
-	move(movementKeysState[Back], gs, -1, 0);
-	move(movementKeysState[Right], gs, 0, 1);
-	move(movementKeysState[Left], gs, 0, -1);
+	move(movementKeysState[Forward], gs, 1, 0, 0);
+	move(movementKeysState[Back], gs, -1, 0,180);
+	move(movementKeysState[Right], gs, 0, 1,-90);
+	move(movementKeysState[Left], gs, 0, -1,90);
 }
 
 void KlawiszSpecjalnyWcisniety(GLint key, int x, int y)

@@ -142,6 +142,8 @@ void move(bool key, GameState &gs, float dx, float dz, int rotation) {
 
 		int nextTile = gs.map[x][z];
 		if (nextTile == 2 || nextTile == 3) {
+			gs.pacmanLastX = gs.pacmanPosX;
+			gs.pacmanLastZ = gs.pacmanPosZ;
 			gs.pacmanPosX = x;
 			gs.pacmanPosZ = z;
 			gs.pacmanAngle = rotation;

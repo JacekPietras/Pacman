@@ -103,35 +103,28 @@ void makeGhosts(GameState& gs) {
 	makeGhosts();
 }
 
-void moveGhosts(){
+void moveGhosts(GameState& gs){
 	int i, ghowstWait = 0;
-	/*init_pair(3, COLOR_RED, COLOR_RED);
-	init_pair(4, COLOR_BLUE, COLOR_BLUE);
-	init_pair(5, COLOR_GREEN, COLOR_GREEN);
-	init_pair(6, COLOR_YELLOW, COLOR_YELLOW);*/
 	
 	for(i=0 ; i<ghostNum ; ++i){
 		ghowstWait = 0; // zeby sie duchy nie zakleszczyly
 		
 		do{
-			ghostDirection[i] = rand()%4 + 1;
+			gs.ghostDirection[i] = rand()%4 + 1;
 			if(ghowstWait++ > 10) break;
 		}while(!checkGhostDirection(i));
 		
 		if(ghowstWait<10){
+			gs.ghostLastX[i] = ghostX[i];
+			gs.ghostLastY[i] = ghostY[i];
 			switch(ghostDirection[i]){
-				case 1: ghostX[i]-=1; break;
-				case 2: ghostX[i]+=1; break;
-				case 3: ghostY[i]-=1; break;
-				case 4: ghostY[i]+=1; break;
+				case 1: gs.ghostX[i]-=1; break;
+				case 2: gs.ghostX[i]+=1; break;
+				case 3: gs.ghostY[i]-=1; break;
+				case 4: gs.ghostY[i]+=1; break;
 				default: return;
 			}
 		}
-		
-		/*mvaddch(ghostY[i]*2+1+sY,ghostX[i]*3+1+sX,' ' | COLOR_PAIR(3+i));
-		mvaddch(ghostY[i]*2+1+sY,ghostX[i]*3+2+sX,' ' | COLOR_PAIR(3+i));*/
 	}
-	
-	//checkWinOrLost();
 }
 

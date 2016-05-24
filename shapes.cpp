@@ -61,3 +61,35 @@ void hud(float x, float y, GameState & gs) {
 	strcat(score, points);
 	text(x, y, score);
 }
+
+double pointsRotation = 0;
+GLUquadricObj *obiekt = gluNewQuadric();
+void points(int **map) {
+	pointsRotation += 3;
+	if (pointsRotation >= 360) pointsRotation = 0;
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
+	setShinyMaterial();
+	glBindTexture(GL_TEXTURE_2D, energy_id);
+	gluQuadricDrawStyle(obiekt, GLU_FILL);
+	gluQuadricNormals(obiekt, GLU_SMOOTH);
+	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
+	gluQuadricTexture(obiekt, GL_TRUE);
+
+	glTranslatef(0, -spacing / 4, 0);
+	for (int j = 0; j < mapHeight; ++j) {
+		for (int i = 0; i < mapWidth; ++i) {
+			if (map[i][j] == 3) {
+				glPushMatrix();
+					glRotatef(pointsRotation, 0, 1, 0);
+					gluSphere(obiekt, .3f, 50, 50);
+				glPopMatrix();
+			}
+			glTranslatef(spacing, 0, 0);
+		}
+		glTranslatef(-mapWidth* spacing, 0, spacing);
+	}
+	glDisable(GL_CULL_FACE);
+}

@@ -4,6 +4,8 @@
 #include <math.h>
 #include <direct.h>
 #include <GL/glu.h>
+
+#include "textures.h"
 #include "draw_scene.h"
 #include "models.h"
 #include "main.h"
@@ -90,22 +92,38 @@ void resizeWindow (int width, int height){
     glMatrixMode(GL_MODELVIEW);
 }
 
+float lerp(int &from, int to, float ratio) {
+	float ret = from + (to - from)*ratio;
+	if (from < to ? 0.01f + ret > to : ret - 0.01f < to) from = to;
+	return ret;
+}
+
 int framecounter = 0;
+void lerpGhosts(GameState &gs) {
+	for (int i = 0; i < gs.ghostNum; ++i) {
+		gs.ghostLerpX[i] = lerp(gs.ghostLastX[i], gs.ghostX[i], framecounter / 10.0f);
+		gs.ghostLerpY[i] = lerp(gs.ghostLastY[i], gs.ghostY[i], framecounter / 10.0f);
+	}
+}
+
 void drawFrame()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Kasowanie ekranu
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(gameState.pacmanPosX - mapWidth / 2 + kameraX, kameraY, gameState.pacmanPosZ - mapHeight / 2 + kameraZ,gameState.pacmanPosX - mapWidth / 2, -1, gameState.pacmanPosZ - mapHeight / 2, 0, 1, 0); // kamera
+	gameState.pacLerpX = lerp(gameState.pacmanLastX, gameState.pacmanPosX, framecounter / 10.0f);
+	gameState.pacLerpZ = lerp(gameState.pacmanLastZ, gameState.pacmanPosZ, framecounter / 10.0f);
+	gluLookAt(gameState.pacLerpX - mapWidth / 2 + kameraX, kameraY, gameState.pacLerpZ - mapHeight / 2 + kameraZ, gameState.pacLerpX - mapWidth / 2, -1, gameState.pacLerpZ - mapHeight / 2, 0, 1, 0); // kamera
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
 	glPushMatrix();
 
 	checkWinOrLost(gameState);
 	if (++framecounter > 10) {
-		moveGhosts();
+		moveGhosts(gameState);
 		handleMovement(gameState);
 		framecounter = 0;
 	}
+	lerpGhosts(gameState);
 	drawScene(gameState);
 	glMatrixMode(GL_MODELVIEW);
 
@@ -156,7 +174,7 @@ int main(int argc, char **argv) {
 	makeGhosts(gameState);
 
 
-	drawInit();
+	loadTextures();
 	glutMainLoop();
 	return(0);
 }

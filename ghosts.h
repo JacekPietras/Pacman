@@ -7,4 +7,4 @@ void checkWinOrLost(GameState & gs);
 
 void makeGhosts(GameState & gs);
 
-void moveGhosts();
+void moveGhosts(GameState & gs);

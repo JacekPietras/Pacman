@@ -143,6 +143,7 @@
     <ClCompile Include="shapes.cpp" />
     <ClCompile Include="tekstura.cpp" />
     <ClCompile Include="textureBMP.cpp" />
+    <ClCompile Include="textures.cpp" />
     <ClCompile Include="textureTGA.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="shapes.h" />
     <ClInclude Include="tekstura.h" />
     <ClInclude Include="textureBMP.h" />
+    <ClInclude Include="textures.h" />
     <ClInclude Include="textureTGA.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>

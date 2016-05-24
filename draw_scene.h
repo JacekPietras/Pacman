@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include "main.h"
-#include "tekstura.h"
 #include "models.h"
 #include "model3DS.h"
 #include <math.h>
@@ -15,7 +14,6 @@
 #include "materials.h"
 #include "shapes.h"
 
-void drawInit();
 void drawScene(GameState &gs);
 
 #endif

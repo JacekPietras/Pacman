@@ -6,69 +6,10 @@
 int **map;
 int **map_tiles;
 
-int roof_id0;
-int roof_id1;
-int roof_id2;
-int roof_id3;
-int roof_id4;
-int floor_id0_1;
-int floor_id0_2;
-int floor_id0_3;
-int floor_id1_1;
-int floor_id1_2;
-int floor_id1_3;
-int floor_id2_1;
-int floor_id2_2;
-int floor_id2_3;
-int floor_id3_1;
-int floor_id3_2;
-int floor_id3_3;
-int floor_id4_1;
-int floor_id4_2;
-int floor_id4_3;
 
-int side_1_id;
-int side_2_id;
-int side_3_id;
-
-int energy_id;
-int shadow_id;
-int shadow_ball_id;
-
-double pointsRotation = 0;
 
 // Function fired on start
-void drawInit() {
-	floor_id0_1 = WczytajTeksture("floor0.bmp");
-	floor_id0_2 = WczytajTeksture("floor0_2.bmp");
-	floor_id0_3 = WczytajTeksture("floor0_3.bmp");
-	floor_id1_1 = WczytajTeksture("floor1.bmp");
-	floor_id1_2 = WczytajTeksture("floor1_2.bmp");
-	floor_id1_3 = WczytajTeksture("floor1_3.bmp");
-	floor_id2_1 = WczytajTeksture("floor2.bmp");
-	floor_id2_2 = WczytajTeksture("floor2_2.bmp");
-	floor_id2_3 = WczytajTeksture("floor2_3.bmp");
-	floor_id3_1 = WczytajTeksture("floor3.bmp");
-	floor_id3_2 = WczytajTeksture("floor3_2.bmp");
-	floor_id3_3 = WczytajTeksture("floor3_3.bmp");
-	floor_id4_1 = WczytajTeksture("floor4.bmp");
-	floor_id4_2 = WczytajTeksture("floor4_2.bmp");
-	floor_id4_3 = WczytajTeksture("floor4_3.bmp");
 
-	roof_id0 = WczytajTeksture("roof0.bmp");
-	roof_id1 = WczytajTeksture("roof1.bmp");
-	roof_id2 = WczytajTeksture("roof2.bmp");
-	roof_id3 = WczytajTeksture("roof3.bmp");
-	roof_id4 = WczytajTeksture("roof4.bmp");
-
-	side_1_id = WczytajTeksture("side_1.bmp");
-	side_2_id = WczytajTeksture("side_2.bmp");
-	side_3_id = WczytajTeksture("side_3.bmp");
-
-	energy_id = WczytajTekstureAlpha("energy.bmp");
-	shadow_id = WczytajTekstureAlpha("shadow.bmp");
-	shadow_ball_id = WczytajTekstureAlpha("shadow_ball.bmp");
-}
 
 void drawShadow(double x, double y, int color) {
 	double s = spacing;
@@ -365,37 +306,31 @@ void drawWall(int i, int j) {
 
 void draw(void(*shape)(float, float), float x, float z) {
 	glPushMatrix();
-	shape(x,z);
+		shape(x,z);
 	glPopMatrix();
 }
 void draw(void(*shape)(float, float, GameState &gs), float x, float z, GameState &gs) {
 	glPushMatrix();
-	shape(x, z, gs);
+		shape(x, z, gs);
 	glPopMatrix();
 }
 void draw(void(*shape)(float, float, char * str), float x, float z, char * str) {
 	glPushMatrix();
-	shape(x, z, str);
+		shape(x, z, str);
 	glPopMatrix();
 }
-
+template <typename T>
+void draw(void(*shape)(T arg), T arg) {
+	glPushMatrix();
+		shape(arg);
+	glPopMatrix();
+}
 
 // Function fired every frame
 void drawScene(GameState &gs) {
 	if (!gs.gameOver) {
 		map = gs.map;
 		map_tiles = gs.map_tiles;
-
-		GLUquadricObj *obiekt = gluNewQuadric();
-		gluQuadricOrientation(obiekt, GLU_OUTSIDE);
-		gluQuadricDrawStyle(obiekt, GLU_FILL);
-		pointsRotation += 3;
-		if (pointsRotation >= 360) pointsRotation = 0;
-
-		for (int i = 0; i < gs.ghostNum; ++i) {
-			draw(ghost, gs.ghostX[i] - mapWidth / 2, gs.ghostY[i] - mapHeight / 2);
-		}
-		draw(pacman, gs.pacmanPosX - mapWidth / 2, gs.pacmanPosZ - mapHeight / 2, gs);
 
 		glPushMatrix();
 		setGreyMaterial();
@@ -406,58 +341,31 @@ void drawScene(GameState &gs) {
 		}
 		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
-		// Labirynth
 
-
-
-		glPushMatrix();
-		setShadowMaterial();
-		drawShadow(gs.pacmanPosX, gs.pacmanPosZ, BLACK);
-		glPopMatrix();
-
-		glPushMatrix();
 		for (int j = 0; j < mapHeight; ++j) {
 			for (int i = 0; i < mapWidth; ++i) {
 				if (map[i][j] == 3) {
-					glPushMatrix();
 					setShinyMaterial();
 					drawShadow((i - mapWidth / 2), (j - mapHeight / 2), BLUE);
-					glPopMatrix();
 				}
 			}
 		}
-		glPopMatrix();
-
-		glMatrixMode(GL_MODELVIEW);
 
 		glPushMatrix();
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CCW);
-		glTranslatef(-(mapWidth / 2) * spacing, -spacing / 4, -(mapHeight / 2) * spacing);
-		for (int j = 0; j < mapHeight; ++j) {
-			for (int i = 0; i < mapWidth; ++i) {
-				if (map[i][j] == 3) {
-					glPushMatrix();
-					setShinyMaterial();
-					glMatrixMode(GL_TEXTURE);
-					glMatrixMode(GL_MODELVIEW);
-					glRotatef(pointsRotation, 0, 1, 0);
-					glBindTexture(GL_TEXTURE_2D, energy_id);
-					gluQuadricDrawStyle(obiekt, GLU_FILL);
-					gluQuadricNormals(obiekt, GLU_SMOOTH);
-					gluQuadricOrientation(obiekt, GLU_OUTSIDE);
-					gluQuadricTexture(obiekt, GL_TRUE);
+		// Align world with map
+			glTranslatef((-mapWidth / 2) * spacing, 0, (-mapHeight / 2) * spacing);
 
-					gluSphere(obiekt, .3f, 50, 50);
-					glPopMatrix();
-				}
-
-				glTranslatef(spacing, 0, 0);
+			for (int i = 0; i < gs.ghostNum; ++i) {
+				draw(ghost, gs.ghostLerpX[i], gs.ghostLerpY[i]);
 			}
-			glTranslatef(-mapWidth* spacing, 0, spacing);
-		}
-		glDisable(GL_CULL_FACE);
+
+			draw(pacman, gs.pacLerpX, gs.pacLerpZ, gs);
+
+			setShadowMaterial();
+			drawShadow(gs.pacLerpX, gs.pacLerpZ, BLACK);
+
+			draw(points, gs.map);
+
 		glPopMatrix();
 
 		draw(hud, oknoSzerkosc - 300, 10, gs);
@@ -466,6 +374,6 @@ void drawScene(GameState &gs) {
 		draw(text, oknoSzerkosc / 2, oknoWysokosc / 2, "GAME OVER");
 		draw(hud, oknoSzerkosc - 300, 10, gs);
 	}
-
 }
+
 

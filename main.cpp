@@ -106,6 +106,19 @@ void lerpGhosts(GameState &gs) {
 	}
 }
 
+void checkWin(GameState &gs) {
+	bool win = true;
+	for (int j = 0; j < mapHeight; ++j) {
+		for (int i = 0; i < mapWidth; ++i) {
+			if (gs.map[i][j] == 3) {
+				win = false;
+			}
+		}
+	}
+	if (win)
+		gs.won = true;
+}
+
 void drawFrame()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Kasowanie ekranu
@@ -123,6 +136,7 @@ void drawFrame()
 		framecounter = 0;
 	}
 	handleMovement(gameState, framecounter);
+	checkWin(gameState);
 
 	lerpGhosts(gameState);
 	drawScene(gameState);

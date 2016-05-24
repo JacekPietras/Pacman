@@ -328,7 +328,7 @@ void draw(void(*shape)(T arg), T arg) {
 
 // Function fired every frame
 void drawScene(GameState &gs) {
-	if (!gs.gameOver) {
+	if (!gs.gameOver && !gs.won) {
 		map = gs.map;
 		map_tiles = gs.map_tiles;
 
@@ -369,9 +369,11 @@ void drawScene(GameState &gs) {
 		glPopMatrix();
 
 		draw(hud, oknoSzerkosc - 300, 10, gs);
-	}
-	else {
+	} else if(gs.gameOver){
 		draw(text, oknoSzerkosc / 2, oknoWysokosc / 2, "GAME OVER");
+		draw(hud, oknoSzerkosc - 300, 10, gs);
+	} else if (gs.won) {
+		draw(text, oknoSzerkosc / 2, oknoWysokosc / 2, "YOU WIN");
 		draw(hud, oknoSzerkosc - 300, 10, gs);
 	}
 }

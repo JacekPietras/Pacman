@@ -23,4 +23,5 @@ struct GameState {
 	int ghostNum = 4;
 
 	bool gameOver = false;
+	bool won = false;
 };

@@ -2,8 +2,6 @@
 
 #include "glut.h"
 #include "main.h"
-#include <iostream>
-using namespace std;
 
 // Kamera
 extern int pozycjaMyszyX;						// na ekranie

@@ -9,4 +9,5 @@
 
 void ghost(float x, float z);
 void pacman(float x, float z, GameState & gs);
+void text(float x, float y, char * str);
 void hud(float x, float y, GameState & gs);

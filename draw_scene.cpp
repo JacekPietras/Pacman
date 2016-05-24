@@ -3,7 +3,6 @@
 #define M_PI 3.14159265358979323846
 #define BLACK 0
 #define BLUE 1
-float pacmanPosX, pacmanPosZ;
 int **map;
 int **map_tiles;
 
@@ -369,69 +368,75 @@ void draw(void(*shape)(float, float), float x, float z) {
 	shape(x,z);
 	glPopMatrix();
 }
-void draw(void(*shape)(float, float, GameState & gs), float x, float z, GameState & gs) {
+void draw(void(*shape)(float, float, GameState &gs), float x, float z, GameState &gs) {
 	glPushMatrix();
 	shape(x, z, gs);
+	glPopMatrix();
+}
+void draw(void(*shape)(float, float, char * str), float x, float z, char * str) {
+	glPushMatrix();
+	shape(x, z, str);
 	glPopMatrix();
 }
 
 
 // Function fired every frame
 void drawScene(GameState &gs) {
-	pacmanPosX = gs.pacmanPosX;
-	pacmanPosZ = gs.pacmanPosZ;
-	map = gs.map;
-	map_tiles = gs.map_tiles;
+	if (!gs.gameOver) {
+		map = gs.map;
+		map_tiles = gs.map_tiles;
 
-	GLUquadricObj *obiekt = gluNewQuadric();
-	gluQuadricOrientation(obiekt, GLU_OUTSIDE);
-	gluQuadricDrawStyle(obiekt, GLU_FILL);
-	pointsRotation+=3;
-	if (pointsRotation >= 360) pointsRotation = 0;
-	
-	draw(ghost, 1, 0);
-	draw(pacman, pacmanPosX, pacmanPosZ, gs);
+		GLUquadricObj *obiekt = gluNewQuadric();
+		gluQuadricOrientation(obiekt, GLU_OUTSIDE);
+		gluQuadricDrawStyle(obiekt, GLU_FILL);
+		pointsRotation += 3;
+		if (pointsRotation >= 360) pointsRotation = 0;
 
-	glPushMatrix();
+		for (int i = 0; i < gs.ghostNum; ++i) {
+			draw(ghost, gs.ghostX[i] - mapWidth / 2, gs.ghostY[i] - mapHeight / 2);
+		}
+		draw(pacman, gs.pacmanPosX - mapWidth / 2, gs.pacmanPosZ - mapHeight / 2, gs);
+
+		glPushMatrix();
 		setGreyMaterial();
-		for (int j = 0; j<mapHeight; ++j) {
-			for (int i = 0; i<mapWidth; ++i) {
+		for (int j = 0; j < mapHeight; ++j) {
+			for (int i = 0; i < mapWidth; ++i) {
 				drawWall(i, j);
 			}
 		}
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-	// Labirynth
-	
-	
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+		// Labirynth
 
-	glPushMatrix();
-	setShadowMaterial();
-	drawShadow(pacmanPosX, pacmanPosZ, BLACK);
-	glPopMatrix();
 
-	glPushMatrix();
-	for (int j = 0; j<mapHeight; ++j) {
-		for (int i = 0; i<mapWidth; ++i) {
-			if (map[i][j] == 3) {
-				glPushMatrix();
-				setShinyMaterial();
-				drawShadow((i-mapWidth/2), (j-mapHeight/2), BLUE);
-				glPopMatrix();
+
+		glPushMatrix();
+		setShadowMaterial();
+		drawShadow(gs.pacmanPosX, gs.pacmanPosZ, BLACK);
+		glPopMatrix();
+
+		glPushMatrix();
+		for (int j = 0; j < mapHeight; ++j) {
+			for (int i = 0; i < mapWidth; ++i) {
+				if (map[i][j] == 3) {
+					glPushMatrix();
+					setShinyMaterial();
+					drawShadow((i - mapWidth / 2), (j - mapHeight / 2), BLUE);
+					glPopMatrix();
+				}
 			}
 		}
-	}
-	glPopMatrix();
-	
-	glMatrixMode(GL_MODELVIEW);
-	
-	glPushMatrix();
+		glPopMatrix();
+
+		glMatrixMode(GL_MODELVIEW);
+
+		glPushMatrix();
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		glFrontFace(GL_CCW);
-		glTranslatef(-(mapWidth / 2) * spacing, -spacing/4, - (mapHeight / 2) * spacing);
-		for (int j = 0; j<mapHeight; ++j) {
-			for (int i = 0; i<mapWidth; ++i) {
+		glTranslatef(-(mapWidth / 2) * spacing, -spacing / 4, -(mapHeight / 2) * spacing);
+		for (int j = 0; j < mapHeight; ++j) {
+			for (int i = 0; i < mapWidth; ++i) {
 				if (map[i][j] == 3) {
 					glPushMatrix();
 					setShinyMaterial();
@@ -453,8 +458,14 @@ void drawScene(GameState &gs) {
 			glTranslatef(-mapWidth* spacing, 0, spacing);
 		}
 		glDisable(GL_CULL_FACE);
-	glPopMatrix();
+		glPopMatrix();
 
-	draw(hud, oknoSzerkosc - 300, 10, gs);
+		draw(hud, oknoSzerkosc - 300, 10, gs);
+	}
+	else {
+		draw(text, oknoSzerkosc / 2, oknoWysokosc / 2, "GAME OVER");
+		draw(hud, oknoSzerkosc - 300, 10, gs);
+	}
+
 }
 

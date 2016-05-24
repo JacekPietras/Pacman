@@ -136,25 +136,17 @@ void onKeyUp(GLubyte key, int x, int y) {
 
 //Called each frame
 void move(bool key, GameState &gs, float dx, float dz, int rotation) {
-	const float speed = 0.5;
 	if (key) {
-		float x = gs.pacmanPosX + dx * speed;
-		float z = gs.pacmanPosZ + dz * speed;
+		int x = gs.pacmanPosX + dx;
+		int z = gs.pacmanPosZ + dz ;
 
-		float s = spacing / 2;
-		int xOnMap = (int)(round(x + (1 - speed) / 2 * dx) + (mapWidth / 2));
-		int zOnMap = (int)(round(z + (1 - speed) / 2 * dz) + (mapHeight / 2));
-		cout << "xOnMap = " << xOnMap << " zOnMap = " << zOnMap << " x = " << x << " z = " << z;
-
-		int nextTile = gs.map[xOnMap][zOnMap];
-
-		cout << " nextTile = " << nextTile << endl;
+		int nextTile = gs.map[x][z];
 		if (nextTile == 2 || nextTile == 3) {
 			gs.pacmanPosX = x;
 			gs.pacmanPosZ = z;
 			gs.pacmanAngle = rotation;
 			if (nextTile == 3) {
-				gs.map[xOnMap][zOnMap] = 2;
+				gs.map[x][z] = 2;
 				gs.points++;
 			}
 		}

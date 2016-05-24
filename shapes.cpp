@@ -3,29 +3,30 @@
 void ghost(float x, float z) {
 	setPacmanMaterial();
 	glTranslatef(x*spacing, -1, z*spacing);
+	glRotatef(180, 0, 1, 0);
 	glScalef(.15f, .15f, .15f);
 	rysujModel("ghost");
 }
 
-float pacmanRot = 0, pacmanRotDelta = 0.5;
+float pacmanRot = 0, pacmanRotDelta = 1;
 void pacman(float x, float z, GameState & gs) {
 	setPacmanMaterial();
-	glTranslatef(x*spacing, -1, z*spacing);
+	glTranslatef(x*spacing, 0, z*spacing);
 	glScalef(.2f, .2f, .15f);
 	glRotatef(gs.pacmanAngle, 0, 1, 0);
 	glPushMatrix();
-	glRotatef(pacmanRot, 0, 0, 1);
-	rysujModel("pacman");
+		glRotatef(-pacmanRot, 0, 0, 1);
+		rysujModel("pacman");
 	glPopMatrix();
 	glRotatef(pacmanRot, 0, 0, 1);
 	rysujModel("pacman2");
 
 	pacmanRot += pacmanRotDelta;
-	if (pacmanRot > 20 || pacmanRot < 0)
+	if (pacmanRot > 15 || pacmanRot < 0)
 		pacmanRotDelta = -pacmanRotDelta;
 }
 
-void hud(float x, float y, GameState & gs) {
+void text(float x, float y, char *str) {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -41,15 +42,8 @@ void hud(float x, float y, GameState & gs) {
 	glRasterPos2f(x, y);
 
 	glColor3f(1, 1, 1);
-
-	char *menu = "Points : ";
-	for (int i = 0; i < strlen(menu); ++i) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, menu[i]);
-	}
-	char points[4];
-	itoa(gs.points, points, 10);
-	for (int i = 0; i < strlen(points); ++i) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, points[i]);
+	for (int i = 0; i < strlen(str); ++i) {
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str[i]);
 	}
 
 	glDisable(GL_COLOR_MATERIAL);
@@ -58,4 +52,12 @@ void hud(float x, float y, GameState & gs) {
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void hud(float x, float y, GameState & gs) {
+	char points[4];
+	itoa(gs.points, points, 10);
+	char score[13] = "Points : ";
+	strcat(score, points);
+	text(x, y, score);
 }

@@ -132,6 +132,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ghosts.cpp" />
     <ClCompile Include="interakcja.cpp" />
     <ClCompile Include="map_planner.cpp" />
     <ClCompile Include="draw_scene.cpp" />
@@ -146,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="draw_scene.h" />
+    <ClInclude Include="ghosts.h" />
     <ClInclude Include="interakcja.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="map_planner.h" />

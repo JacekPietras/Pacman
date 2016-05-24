@@ -8,6 +8,7 @@
 #include "models.h"
 #include "main.h"
 #include "interakcja.h"
+#include "ghosts.h"
 
 
 // Wymiary okna
@@ -89,16 +90,22 @@ void resizeWindow (int width, int height){
     glMatrixMode(GL_MODELVIEW);
 }
 
+int framecounter = 0;
 void drawFrame()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Kasowanie ekranu
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(gameState.pacmanPosX * spacing + kameraX, kameraY, gameState.pacmanPosZ * spacing + kameraZ,gameState.pacmanPosX * spacing, -1, gameState.pacmanPosZ * spacing, 0, 1, 0); // kamera
+	gluLookAt(gameState.pacmanPosX - mapWidth / 2 + kameraX, kameraY, gameState.pacmanPosZ - mapHeight / 2 + kameraZ,gameState.pacmanPosX - mapWidth / 2, -1, gameState.pacmanPosZ - mapHeight / 2, 0, 1, 0); // kamera
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
 	glPushMatrix();
 
-	handleMovement(gameState);
+	checkWinOrLost(gameState);
+	if (++framecounter > 10) {
+		moveGhosts();
+		handleMovement(gameState);
+		framecounter = 0;
+	}
 	drawScene(gameState);
 	glMatrixMode(GL_MODELVIEW);
 
@@ -146,6 +153,8 @@ int main(int argc, char **argv) {
 
 	ladujModele();
 	createMap(gameState);
+	makeGhosts(gameState);
+
 
 	drawInit();
 	glutMainLoop();

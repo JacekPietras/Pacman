@@ -18,7 +18,7 @@ extern double kameraPredkoscObrotu;
 #define MIN_DYSTANS 0.5			// minimalny dystans od brzegu obszaru ograniczenia kamery
 extern double obszarKamery;
 
-void handleMovement(GameState &gs);
+void handleMovement(GameState &gs, int frame);
 void onKeyDown(GLubyte key, int x, int y);
 void onKeyUp(GLubyte key, int x, int y);
 void KlawiszSpecjalnyWcisniety(GLint key, int x, int y);

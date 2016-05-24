@@ -120,9 +120,10 @@ void drawFrame()
 	checkWinOrLost(gameState);
 	if (++framecounter > 10) {
 		moveGhosts(gameState);
-		handleMovement(gameState);
 		framecounter = 0;
 	}
+	handleMovement(gameState, framecounter);
+
 	lerpGhosts(gameState);
 	drawScene(gameState);
 	glMatrixMode(GL_MODELVIEW);

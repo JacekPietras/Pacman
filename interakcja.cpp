@@ -14,7 +14,7 @@ double kameraKat;				// kat patrzenia
 double kameraPredkoscObrotu;
 double obszarKamery = 0;
 
-enum Direction { Forward, Right, Back, Left };
+enum Direction { Forward, Right, Back, Left, None };
 bool movementKeysState[4];
 
 void SzablonPrzyciskMyszyWcisniety(int button, int state, int x, int y)
@@ -135,30 +135,49 @@ void onKeyUp(GLubyte key, int x, int y) {
 }
 
 //Called each frame
-void move(bool key, GameState &gs, float dx, float dz, int rotation) {
-	if (key) {
-		int x = gs.pacmanPosX + dx;
-		int z = gs.pacmanPosZ + dz ;
+void move(GameState &gs, float dx, float dz, int rotation) {
+	int x = gs.pacmanPosX + dx;
+	int z = gs.pacmanPosZ + dz ;
 
-		int nextTile = gs.map[x][z];
-		if (nextTile == 2 || nextTile == 3) {
-			gs.pacmanLastX = gs.pacmanPosX;
-			gs.pacmanLastZ = gs.pacmanPosZ;
-			gs.pacmanPosX = x;
-			gs.pacmanPosZ = z;
-			gs.pacmanAngle = rotation;
-			if (nextTile == 3) {
-				gs.map[x][z] = 2;
-				gs.points++;
-			}
+	int nextTile = gs.map[x][z];
+	if (nextTile == 2 || nextTile == 3) {
+		gs.pacmanLastX = gs.pacmanPosX;
+		gs.pacmanLastZ = gs.pacmanPosZ;
+		gs.pacmanPosX = x;
+		gs.pacmanPosZ = z;
+		gs.pacmanAngle = rotation;
+		if (nextTile == 3) {
+			gs.map[x][z] = 2;
+			gs.points++;
 		}
 	}
 }
-void handleMovement(GameState &gs) {
-	move(movementKeysState[Forward], gs, 1, 0, 0);
-	move(movementKeysState[Back], gs, -1, 0,180);
-	move(movementKeysState[Right], gs, 0, 1,-90);
-	move(movementKeysState[Left], gs, 0, -1,90);
+
+Direction last=None;
+void handleMovement(GameState &gs, int frame) {
+	if (frame == 0) {
+		switch (last)
+		{
+		case Forward: move(gs, 1, 0, 0);
+			break;
+		case Right:move(gs, 0, 1, -90);
+			break;
+		case Back: move(gs, -1, 0, 180);
+			break;
+		case Left: move(gs, 0, -1, 90);
+			break;
+		}
+
+		last = None;
+	}
+	if (movementKeysState[Forward])
+		last = Forward;
+	else if (movementKeysState[Right])
+		last = Right;
+	else if(movementKeysState[Back])
+		last = Back;
+	else if(movementKeysState[Left])
+		last = Left;
 }
 
 void KlawiszSpecjalnyWcisniety(GLint key, int x, int y)
